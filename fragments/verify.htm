@@ -26,7 +26,7 @@
     function disableContinue()
     {
         let btn = $("#continueBtn");
-        if(btn.attr("disabled"))
+        if($("#timeCol").val().length > 0)
         {
             btn.removeAttr("disabled");
             btn.css("background-color", "green");
@@ -234,8 +234,8 @@
         </div>
         <div class="col-3 d-flex align-items-cente&gt;r align-content-around flex-column">
             <div style="border-radius: 5px; border-style: solid; border-color: grey ; border-width: 1px;background-color:#ADD8E6; padding:5px 10px 5px">
-                <label style="font-weight: bold" for="selectDataCol">Select DateTimeColumn</label>
-                <select multiple class="form-control p-0" id="selectDataCol" onChange="disableContinue()">
+                <label style="font-weight: bold" for="timeCol">Select DateTimeColumn</label>
+                <select multiple class="form-control p-0" id="timeCol" onChange="disableContinue()">
                     <option class="p-2">LocalDateTime</option>
                     <option class="p-2">DataValue</option>
                     <option class="p-2">UTCOffset</option>
