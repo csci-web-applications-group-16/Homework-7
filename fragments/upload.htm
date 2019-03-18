@@ -10,7 +10,36 @@
     <div style=' margin: 50px 0 50px 0;'>
 
         <h2 id="one" style=background-color:white;text-align:center;height:300px;>Drag and Drop File Into This Square</h2>
-        <h2 id="two" style=display:none;><img src="images/ex3.png" alt="Drag and Drop File Into This Square"></h2>
+        <h2 id="two" style=display:none;>
+
+            <form  method="POST" name="theForm">
+            <table bgcolor="white" border="1" cellpadding="2" cellspacing="2" align="left">
+                <tr>
+                    <td align="left">
+                    <select name=lColumn size=10 multiple>
+                        <option>Data Item 1</option>
+                        <option>Data Item 2</option>
+                        <option>Data Item 3</option>
+                        <option>Data Item 4</option>
+                        <option>Data Item 5</option>
+                    </select>
+                        <br />
+                    <p align="center"><input type="button" onClick="left_to_right()" value=" > "></p>
+
+                </td>
+                    <td align="center">
+
+                    <select name=rColumn size=10 multiple >
+                        <option>Data Item 6</option>
+                    </select>
+                        <br />
+                    <p align="center"><input type="button" onClick="right_to_left()" value=" < " ></p>
+
+                </td>
+                </tr>
+            </table>
+        </form>
+        </h2>
     </div>
 
     <button id="1" onclick="loadData()" data-toggle="modal" data-target="#modal-window">Load</button>
@@ -22,20 +51,66 @@
             const y = document.getElementById("two");
             const w = document.getElementById("1");
             const z = document.getElementById("2");
+
             if (x.style.display === "none") {
                 x.style.display = "block";
                 w.style.display = "block";
                 y.style.display = "none";
                 z.style.display = "none";
             } else {
+
                 w.style.display = "none";
                 x.style.display = "none";
-                y.style.display = "block";
+                y.style.display = "table";
                 z.style.display = "block";
             }
         }
+    <!-- J.Koonce - switching functions are modified versions from http:/'/www.blazonry.com/javascript/selmenu.phps -->
+        function left_to_right() {
+            lColLen = m1.length ;
+            for ( i=0; i<lColLen ; i++){
+                if (m1.options[i].selected == true ) {
+                    rColLen = m2.length;
+                    m2.options[rColLen]= new Option(m1.options[i].text);
+                }
+            }
+
+            for ( i = (lColLen -1); i>=0; i--){
+                if (m1.options[i].selected == true ) {
+                    m1.options[i] = null;
+                }
+            }
+        }
+
+        function right_to_left() {
+            rColLen = m2.length ;
+            for ( i=0; i<rColLen ; i++){
+                if (m2.options[i].selected == true ) {
+                    lColLen = m1.length;
+                    m1.options[lColLen]= new Option(m2.options[i].text);
+                }
+            }
+            for ( i=(rColLen-1); i>=0; i--) {
+                if (m2.options[i].selected == true ) {
+                    m2.options[i] = null;
+                }
+            }
+        }
+
+        for (i=0; i<m1.length; i++) {
+            m1.options[i].selected = true;
+        }
+
+
     </script>
 
+    <script language= "JavaScript">
+
+        var m1 = document.theForm.lColumn;
+        var m2 = document.theForm.rColumn;
+    </script>
+
+    <!-- Written by afoster2373 -->
     <div class="modal fade" id="modal-window" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
