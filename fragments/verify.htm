@@ -40,9 +40,9 @@
 
 </script>
 
-<div style="border-radius: 5px; border-style: solid; border-color: grey ; border-width: 1px;margin: 25px; background-color:#ADD8E6; padding:5px 10px 5px">
+<div style="border-radius: 5px; border-style: solid; border-color: grey ; border-width: 1px;margin: 25px; background-color:#ADD8E6; padding:10px">
     <h5 style="font-weight: bold">Uploaded data file (20 rows): </h5>
-    <div style="max-height: 30%; overflow: auto;" class="table-responsive">
+    <div style="max-height: 25vh; overflow: auto;" class="table-responsive">
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -197,12 +197,12 @@
 <div class="container" style="margin: 25px; min-width: -moz-available;">
     <div class="row justify-content-between">
 
-        <div class="container col-8 m-0" style="border-radius: 5px; border-style: solid; border-color: grey ; border-width: 1px; background-color:#ADD8E6;">
-            <div class="row">
+        <div class="container col-8 pt-2 ml-0" style="border-radius: 5px; border-style: solid; border-color: grey ; border-width: 1px; background-color:#ADD8E6; ">
+            <div class="row h-100">
                 <div class="col-5">
-                    <div class="form-group">
+                    <div class="form-group d-flex flex-column h-100" style="padding-bottom: 10px">
                         <label style="font-weight: bold" for="selectDataCol">Detected Data Columns</label>
-                        <select multiple class="form-control p-0" id="selectDataCol">
+                        <select multiple class="form-control p-0" style="flex: 1;" id="selectDataCol">
                             <option class="p-2">DataValue</option>
                             <option class="p-2">UTCOffset</option>
                             <option class="p-2">DateTimeUTC</option>
@@ -223,17 +223,17 @@
                     </div>
                 </div>
                 <div class="col-5">
-                    <div class="form-group">
+                    <div class="form-group d-flex flex-column h-100" style="padding-bottom: 10px">
                         <label style=" font-weight: bold" for="dataCol">Data Columns</label>
-                        <select multiple class="form-control p-0" id="dataCol">
+                        <select multiple class="form-control p-0" style="flex: 1;" id="dataCol">
                         </select>
                     </div>
                 </div>
             </div>
 
         </div>
-        <div class="col-3 d-flex align-items-cente&gt;r align-content-around flex-column">
-            <div style="border-radius: 5px; border-style: solid; border-color: grey ; border-width: 1px;background-color:#ADD8E6; padding:5px 10px 5px">
+        <div class="col-3 d-flex pr-0 align-content-around flex-column">
+            <div style="border-radius: 5px; border-style: solid; border-color: grey ; border-width: 1px;background-color:#ADD8E6; padding:10px">
                 <label style="font-weight: bold" for="timeCol">Select DateTimeColumn</label>
                 <select multiple class="form-control p-0" id="timeCol" onChange="disableContinue()">
                     <option class="p-2">LocalDateTime</option>
