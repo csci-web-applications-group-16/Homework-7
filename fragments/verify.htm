@@ -15,12 +15,20 @@
 <script>
     function addToDataCol()
     {
-        $("#dataCol").append($("#selectDataCol").children("option:selected").remove())
+        $("#selectDataCol").children("option:selected").each(function(i)
+        {
+            $("#dataCol").append($(this));
+            $('#timeCol option[value="' + $(this).val() + '"]').remove();
+        });
+
     }
 
     function addToDetected()
     {
-        $("#selectDataCol").append($("#dataCol").children("option:selected").remove())
+        let selected = $("#dataCol").children("option:selected").remove();
+
+        $("#selectDataCol").append(selected.clone());
+        $('#timeCol').append(selected.clone());
     }
 
     function disableContinue()
@@ -203,11 +211,12 @@
                     <div class="form-group d-flex flex-column h-100" style="padding-bottom: 10px">
                         <label style="font-weight: bold" for="selectDataCol">Detected Data Columns</label>
                         <select multiple class="form-control p-0" style="flex: 1;" id="selectDataCol">
-                            <option class="p-2">DataValue</option>
-                            <option class="p-2">UTCOffset</option>
-                            <option class="p-2">DateTimeUTC</option>
-                            <option class="p-2">SiteCode</option>
-                            <option class="p-2">VariableCode</option>
+                            <option class="p-2" value="LocalDateTime">LocalDateTime</option>
+                            <option class="p-2" value="DataValue">DataValue</option>
+                            <option class="p-2" value="UTCOffset">UTCOffset</option>
+                            <option class="p-2" value="DateTimeUTC">DateTimeUTC</option>
+                            <option class="p-2" value="SiteCode">SiteCode</option>
+                            <option class="p-2" value="VariableCode">VariableCode</option>
                         </select>
                     </div>
                 </div>
@@ -236,12 +245,12 @@
             <div style="border-radius: 5px; border-style: solid; border-color: grey ; border-width: 1px;background-color:#ADD8E6; padding:10px">
                 <label style="font-weight: bold" for="timeCol">Select DateTimeColumn</label>
                 <select multiple class="form-control p-0" id="timeCol" onChange="disableContinue()">
-                    <option class="p-2">LocalDateTime</option>
-                    <option class="p-2">DataValue</option>
-                    <option class="p-2">UTCOffset</option>
-                    <option class="p-2">DateTimeUTC</option>
-                    <option class="p-2">SiteCode</option>
-                    <option class="p-2">VariableCode</option>
+                    <option class="p-2" value="LocalDateTime">LocalDateTime</option>
+                    <option class="p-2" value="DataValue">DataValue</option>
+                    <option class="p-2" value="UTCOffset">UTCOffset</option>
+                    <option class="p-2" value="DateTimeUTC">DateTimeUTC</option>
+                    <option class="p-2" value="SiteCode">SiteCode</option>
+                    <option class="p-2" value="VariableCode">VariableCode</option>
                 </select>
             </div>
             <button type="button" id="continueBtn" class="btn btn-secondary w-100 mt-3" style="background-color: grey" onclick="nextPage()" disabled>Continue &gt;</button>
