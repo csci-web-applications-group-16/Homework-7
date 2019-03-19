@@ -18,7 +18,7 @@
                         <tr>
                             <td align="left">
                                 <select name=lColumn size=10 multiple>
-                                    <option>Data Item 1</option>s
+                                    <option>Data Item 1</option>
                                     <option>Data Item 2</option>
                                     <option>Data Item 3</option>
                                     <option>Data Item 4</option>
@@ -71,14 +71,14 @@
             function left_to_right() {
                 lColLen = m1.length;
                 for (i = 0; i < lColLen; i++) {
-                    if (m1.options[i].selected == true) {
+                    if (m1.options[i].selected === true) {
                         rColLen = m2.length;
                         m2.options[rColLen] = new Option(m1.options[i].text);
                     }
                 }
 
                 for (i = (lColLen - 1); i >= 0; i--) {
-                    if (m1.options[i].selected == true) {
+                    if (m1.options[i].selected === true) {
                         m1.options[i] = null;
                     }
                 }
@@ -87,13 +87,13 @@
             function right_to_left() {
                 rColLen = m2.length;
                 for (i = 0; i < rColLen; i++) {
-                    if (m2.options[i].selected == true) {
+                    if (m2.options[i].selected === true) {
                         lColLen = m1.length;
                         m1.options[lColLen] = new Option(m2.options[i].text);
                     }
                 }
                 for (i = (rColLen - 1); i >= 0; i--) {
-                    if (m2.options[i].selected == true) {
+                    if (m2.options[i].selected === true) {
                         m2.options[i] = null;
                     }
                 }
@@ -107,9 +107,8 @@
         </script>
 
         <script language="JavaScript">
-
-            var m1 = document.theForm.lColumn;
-            var m2 = document.theForm.rColumn;
+            const m1 = document.theForm.lColumn;
+            const m2 = document.theForm.rColumn;
         </script>
 
         <!-- Written by afoster2373 -->
