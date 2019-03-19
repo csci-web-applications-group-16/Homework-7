@@ -19,7 +19,7 @@
         window.currentProgress = 0;
 
         window.handler = setInterval(function () {
-            $('#progress-bar').css('width', `${window.currentProgress += 2}%`);
+            $('#progress-bar').css('width', `${window.currentProgress += 4}%`);
 
             if (window.currentProgress >= 100) {
                 finishTesting();
@@ -33,4 +33,9 @@
 
     </script>
 
+</div>
+
+<div id="nav-buttons">
+    <button id="previous-page" type='button' class='btn btn-success' onclick="previousPage()">Previous</button>
+    <button id="next-page" type='button' class='btn btn-success' onclick="nextPage()">Continue</button>
 </div>
