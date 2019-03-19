@@ -36,6 +36,8 @@
 </div>
 
 <div id="nav-buttons">
-    <button id="previous-page" type='button' class='btn btn-success' onclick="previousPage()">Previous</button>
+    <button id="previous-page" type='button' class='btn btn-success' onclick="if (window.handler !== undefined)
+            clearInterval(window.handler); previousPage();">Previous
+    </button>
     <button id="next-page" type='button' class='btn btn-success' onclick="nextPage()">Continue</button>
 </div>
