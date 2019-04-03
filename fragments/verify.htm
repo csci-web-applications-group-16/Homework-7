@@ -13,27 +13,25 @@
 
 </style>
 <script>
-    function addToDataCol() {
-        $("#selectDataCol").children("option:selected").each(function (i) {
-            $("#dataCol").append($(this));
-            $('#timeCol option[value="' + $(this).val() + '"]').remove();
-        });
-
+    function addToDataCol()
+    {
+        $("#dataCol").append($("#selectDataCol").children("option:selected").remove())
     }
 
-    function addToDetected() {
-        let selected = $("#dataCol").children("option:selected").remove();
-
-        $("#selectDataCol").append(selected.clone());
-        $('#timeCol').append(selected.clone());
+    function addToDetected()
+    {
+        $("#selectDataCol").append($("#dataCol").children("option:selected").remove())
     }
 
-    function disableContinue() {
+    function disableContinue()
+    {
         let btn = $("#continueBtn");
-        if ($("#timeCol").val().length > 0) {
+        if(btn.attr("disabled"))
+        {
             btn.removeAttr("disabled");
             btn.css("background-color", "green");
-        } else {
+        } else
+        {
             btn.attr("disabled", "disabled");
             btn.css("background-color", "grey");
 
@@ -42,176 +40,174 @@
 
 </script>
 
-<div style="border-radius: 5px; border-style: solid; border-color: grey ; border-width: 1px;margin: 25px; background-color:#ADD8E6; padding:10px">
+<div style="border-radius: 5px; border-style: solid; border-color: grey ; border-width: 1px;margin: 25px; background-color:#ADD8E6; padding:5px 10px 5px">
     <h5 style="font-weight: bold">Uploaded data file (20 rows): </h5>
-    <div style="max-height: 25vh; overflow: auto;" class="table-responsive">
+    <div style="max-height: 30%; overflow: auto;" class="table-responsive">
         <table class="table table-hover">
             <thead>
-            <tr>
-                <th>DataValue</th>
-                <th>LocalDateTime</th>
-                <th>UTCOffset</th>
-                <th>DateTimeUTC</th>
-                <th>SiteCode</th>
-                <th>VariableCode</th>
-                <th>MethodCode</th>
-                <th>SourceCode</th>
-                <th>QualityControlLevelCode</th>
-            </tr>
+                <tr>
+                    <th>DataValue</th>
+                    <th>LocalDateTime</th>
+                    <th>UTCOffset</th>
+                    <th>DateTimeUTC</th>
+                    <th>SiteCode</th>
+                    <th>VariableCode</th>
+                    <th>MethodCode</th>
+                    <th>SourceCode</th>
+                    <th>QualityControlLevelCode</th>
+                </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>0</td>
-                <td>7/1/19060:00</td>
-                <td>7/1/19060:00</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>-9999 (Unknown)</td>
-            </tr>
-            <tr>
-                <td>0</td>
-                <td>7/2/19060:00</td>
-                <td>7/2/19060:00</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>-9999 (Unknown)</td>
-            </tr>
-            <tr>
-                <td>0</td>
-                <td>7/3/19060:00</td>
-                <td>7/3/19060:00</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>-9999 (Unknown)</td>
-            </tr>
-            <tr>
-                <td>0</td>
-                <td>7/4/19060:00</td>
-                <td>7/4/19060:00</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>-9999 (Unknown)</td>
-            </tr>
-            <tr>
-                <td>0</td>
-                <td>7/1/19060:00</td>
-                <td>7/1/19060:00</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>-9999 (Unknown)</td>
-            </tr>
-            <tr>
-                <td>0</td>
-                <td>7/2/19060:00</td>
-                <td>7/2/19060:00</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>-9999 (Unknown)</td>
-            </tr>
-            <tr>
-                <td>0</td>
-                <td>7/3/19060:00</td>
-                <td>7/3/19060:00</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>-9999 (Unknown)</td>
-            </tr>
-            <tr>
-                <td>0</td>
-                <td>7/4/19060:00</td>
-                <td>7/4/19060:00</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>-9999 (Unknown)</td>
-            </tr>
-            <tr>
-                <td>0</td>
-                <td>7/1/19060:00</td>
-                <td>7/1/19060:00</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>-9999(Unknown)</td>
-            </tr>
-            <tr>
-                <td>0</td>
-                <td>7/2/19060:00</td>
-                <td>7/2/19060:00</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>-9999 (Unknown)</td>
-            </tr>
-            <tr>
-                <td>0</td>
-                <td>7/3/19060:00</td>
-                <td>7/3/19060:00</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>-9999 (Unknown)</td>
-            </tr>
-            <tr>
-                <td>0</td>
-                <td>7/4/19060:00</td>
-                <td>7/4/19060:00</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>-9999 (Unknown)</td>
-            </tr>
+                <tr>
+                    <td>0</td>
+                    <td>7/1/19060:00</td>
+                    <td>7/1/19060:00</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>-9999 (Unknown)</td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>7/2/19060:00</td>
+                    <td>7/2/19060:00</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>-9999 (Unknown)</td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>7/3/19060:00</td>
+                    <td>7/3/19060:00</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>-9999 (Unknown)</td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>7/4/19060:00</td>
+                    <td>7/4/19060:00</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>-9999 (Unknown)</td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>7/1/19060:00</td>
+                    <td>7/1/19060:00</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>-9999 (Unknown)</td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>7/2/19060:00</td>
+                    <td>7/2/19060:00</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>-9999 (Unknown)</td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>7/3/19060:00</td>
+                    <td>7/3/19060:00</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>-9999 (Unknown)</td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>7/4/19060:00</td>
+                    <td>7/4/19060:00</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>-9999 (Unknown)</td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>7/1/19060:00</td>
+                    <td>7/1/19060:00</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>-9999(Unknown)</td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>7/2/19060:00</td>
+                    <td>7/2/19060:00</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>-9999 (Unknown)</td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>7/3/19060:00</td>
+                    <td>7/3/19060:00</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>-9999 (Unknown)</td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>7/4/19060:00</td>
+                    <td>7/4/19060:00</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>-9999 (Unknown)</td>
+                </tr>
             </tbody>
         </table>
     </div>
 </div>
-<div class="container" style="margin: 25px;">
+<div class="container" style="margin: 25px; min-width: -moz-available;">
     <div class="row justify-content-between">
 
-        <div class="container col-8 pt-2 ml-0"
-             style="border-radius: 5px; border-style: solid; border-color: grey ; border-width: 1px; background-color:#ADD8E6; ">
-            <div class="row h-100">
+        <div class="container col-8 m-0" style="border-radius: 5px; border-style: solid; border-color: grey ; border-width: 1px; background-color:#ADD8E6;">
+            <div class="row">
                 <div class="col-5">
-                    <div class="form-group d-flex flex-column h-100" style="padding-bottom: 10px">
+                    <div class="form-group">
                         <label style="font-weight: bold" for="selectDataCol">Detected Data Columns</label>
-                        <select multiple class="form-control p-0" style="flex: 1;" id="selectDataCol">
-                            <option class="p-2" value="LocalDateTime">LocalDateTime</option>
-                            <option class="p-2" value="DataValue">DataValue</option>
-                            <option class="p-2" value="UTCOffset">UTCOffset</option>
-                            <option class="p-2" value="DateTimeUTC">DateTimeUTC</option>
-                            <option class="p-2" value="SiteCode">SiteCode</option>
-                            <option class="p-2" value="VariableCode">VariableCode</option>
+                        <select multiple class="form-control p-0" id="selectDataCol">
+                            <option class="p-2">DataValue</option>
+                            <option class="p-2">UTCOffset</option>
+                            <option class="p-2">DateTimeUTC</option>
+                            <option class="p-2">SiteCode</option>
+                            <option class="p-2">VariableCode</option>
                         </select>
                     </div>
                 </div>
@@ -219,47 +215,36 @@
 
                     <div class=" d-flex align-items-center align-content-around flex-column" style="min-height:100%">
                         <div class="p-2" style="margin-top:auto; margin-bottom: 2%">
-                            <button onclick="addToDataCol()" style="background-color:#e6f4fd; border-color: #E1EEFC; border-radius: 5px"
-                                    type="button">&gt;
-                            </button>
+                            <button onclick="addToDataCol()" style="background-color:#e6f4fd; border-color: #E1EEFC; border-radius: 5px" type="button">&gt;</button>
                         </div>
                         <div class="p-2" style="margin-bottom:auto; margin-top: 2%">
-                            <button onclick="addToDetected()" style="background-color:#e6f4fd; border-color: #E1EEFC;border-radius: 5px"
-                                    type="button">&lt;
-                            </button>
+                            <button onclick="addToDetected()" style="background-color:#e6f4fd; border-color: #E1EEFC;border-radius: 5px" type="button">&lt;</button>
                         </div>
                     </div>
                 </div>
                 <div class="col-5">
-                    <div class="form-group d-flex flex-column h-100" style="padding-bottom: 10px">
+                    <div class="form-group">
                         <label style=" font-weight: bold" for="dataCol">Data Columns</label>
-                        <select multiple class="form-control p-0" style="flex: 1;" id="dataCol">
+                        <select multiple class="form-control p-0" id="dataCol">
                         </select>
                     </div>
                 </div>
             </div>
 
         </div>
-        <div class="col-3 d-flex pr-0 align-content-around flex-column">
-            <div style="border-radius: 5px; border-style: solid; border-color: grey ; border-width: 1px;background-color:#ADD8E6; padding:10px">
-                <label style="font-weight: bold" for="timeCol">Select DateTimeColumn</label>
-                <select multiple class="form-control p-0" id="timeCol" onChange="disableContinue()">
-                    <option class="p-2" value="LocalDateTime">LocalDateTime</option>
-                    <option class="p-2" value="DataValue">DataValue</option>
-                    <option class="p-2" value="UTCOffset">UTCOffset</option>
-                    <option class="p-2" value="DateTimeUTC">DateTimeUTC</option>
-                    <option class="p-2" value="SiteCode">SiteCode</option>
-                    <option class="p-2" value="VariableCode">VariableCode</option>
+        <div class="col-3 d-flex align-items-cente&gt;r align-content-around flex-column">
+            <div style="border-radius: 5px; border-style: solid; border-color: grey ; border-width: 1px;background-color:#ADD8E6; padding:5px 10px 5px">
+                <label style="font-weight: bold" for="selectDataCol">Select DateTimeColumn</label>
+                <select multiple class="form-control p-0" id="selectDataCol" onChange="disableContinue()">
+                    <option class="p-2">LocalDateTime</option>
+                    <option class="p-2">DataValue</option>
+                    <option class="p-2">UTCOffset</option>
+                    <option class="p-2">DateTimeUTC</option>
+                    <option class="p-2">SiteCode</option>
+                    <option class="p-2">VariableCode</option>
                 </select>
             </div>
-            <button type="button" id="continueBtn" class="btn btn-secondary w-100 mt-3" style="background-color: grey" onclick="nextPage()"
-                    disabled>Continue &gt;
-            </button>
+            <button type="button" id="continueBtn" class="btn btn-secondary w-100 mt-3" style="background-color: grey" onclick="nextPage()" disabled>Continue &gt;</button>
         </div>
     </div>
-</div>
-
-
-<div id="nav-buttons">
-    <button id="previous-page" type='button' class='btn btn-success' onclick="previousPage()">Previous</button>
 </div>

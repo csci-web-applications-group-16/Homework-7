@@ -2,137 +2,58 @@
 <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'
         integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM' crossorigin='anonymous'></script>
 
-<p> A paragraph explaining the content of this website. A paragraph explaining the content of this website.
-    A paragraph explaining the content of this website. A paragraph explaining the content of this website.
-    A paragraph explaining the content of this website. A paragraph explaining the content of this website.</p>
+<div style=' margin: 50px 0 50px 0;'>
+    <p> A paragraph explaining the content of this website. A paragraph explaining the content of this website.
+        A paragraph explaining the content of this website. A paragraph explaining the content of this website.
+        A paragraph explaining the content of this website. A paragraph explaining the content of this website.</p>
 
-<div style='background-color: #FEF7C3; margin: 5px 50px 5px 50px; padding: 50px; border: 5px; border-radius: 10px'>
     <div style=' margin: 50px 0 50px 0;'>
-        <div style=' margin: 50px 0 50px 0;'>
 
-            <h2 id="one" style=background-color:white;text-align:center;height:300px;>Drag and Drop File Into This Square</h2>
-            <h2 id="two" style=display:none;>
+        <h2 id="one" style=background-color:white;text-align:center;height:300px;>Drag and Drop File Into This Square</h2>
+        <h2 id="two" style=display:none;><img src="images/ex3.png" alt="Drag and Drop File Into This Square"></h2>
+    </div>
 
-                <form method="POST" name="theForm">
-                    <table bgcolor="white" border="1" cellpadding="2" cellspacing="2" align="left">
-                        <tr>
-                            <td align="left">
-                                <select name=lColumn size=10 multiple>
-                                    <option>Data Item 1</option>
-                                    <option>Data Item 2</option>
-                                    <option>Data Item 3</option>
-                                    <option>Data Item 4</option>
-                                    <option>Data Item 5</option>
-                                </select>
-                                <br/>
-                                <p align="center"><input type="button" onClick="left_to_right()" value=" > "></p>
+    <button id="1" onclick="loadData()" data-toggle="modal" data-target="#modal-window">Load</button>
+    <button id="2" style=display:none; onclick="loadData()">Remove</button>
 
-                            </td>
-                            <td align="center">
-
-                                <select name=rColumn size=10 multiple>
-                                    <option>Data Item 6</option>
-                                </select>
-                                <br/>
-                                <p align="center"><input type="button" onClick="right_to_left()" value=" < "></p>
-
-                            </td>
-                        </tr>
-                    </table>
-                </form>
-            </h2>
-        </div>
-
-        <button id="1" onclick="loadData()" data-toggle="modal" data-target="#modal-window">Load</button>
-        <button id="2" style=display:none; onclick="loadData()">Remove</button>
-
-        <script>
-            m1 = document.theForm.lColumn;
-            m2 = document.theForm.rColumn;
-
-            function loadData() {
-                const x = document.getElementById("one");
-                const y = document.getElementById("two");
-                const w = document.getElementById("1");
-                const z = document.getElementById("2");
-
-                if (x.style.display === "none") {
-                    x.style.display = "block";
-                    w.style.display = "block";
-                    y.style.display = "none";
-                    z.style.display = "none";
-                } else {
-
-                    w.style.display = "none";
-                    x.style.display = "none";
-                    y.style.display = "table";
-                    z.style.display = "block";
-                }
+    <script>
+        function loadData() {
+            const x = document.getElementById("one");
+            const y = document.getElementById("two");
+            const w = document.getElementById("1");
+            const z = document.getElementById("2");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+                w.style.display = "block";
+                y.style.display = "none";
+                z.style.display = "none";
+            } else {
+                w.style.display = "none";
+                x.style.display = "none";
+                y.style.display = "block";
+                z.style.display = "block";
             }
+        }
+    </script>
 
-            <!-- J.Koonce - switching functions are modified versions from http:/'/www.blazonry.com/javascript/selmenu.phps -->
-            function left_to_right() {
-                lColLen = m1.length;
-                for (i = 0; i < lColLen; i++) {
-                    if (m1.options[i].selected === true) {
-                        rColLen = m2.length;
-                        m2.options[rColLen] = new Option(m1.options[i].text);
-                    }
-                }
-
-                for (i = (lColLen - 1); i >= 0; i--) {
-                    if (m1.options[i].selected === true) {
-                        m1.options[i] = null;
-                    }
-                }
-            }
-
-            function right_to_left() {
-                rColLen = m2.length;
-                for (i = 0; i < rColLen; i++) {
-                    if (m2.options[i].selected === true) {
-                        lColLen = m1.length;
-                        m1.options[lColLen] = new Option(m2.options[i].text);
-                    }
-                }
-                for (i = (rColLen - 1); i >= 0; i--) {
-                    if (m2.options[i].selected === true) {
-                        m2.options[i] = null;
-                    }
-                }
-            }
-
-            for (i = 0; i < m1.length; i++) {
-                m1.options[i].selected = true;
-            }
-
-
-        </script>
-
-        <!-- Written by afoster2373 -->
-        <div class="modal fade" id="modal-window" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class=" modal-title" id="modal-title">Uploading...</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <img class="center" src="https://i.gifer.com/ZKZg.gif" height=400px width=400px
-                             alt="Loading Gif">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
+    <div class="modal fade" id="modal-window" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class=" modal-title" id="modal-title">Uploading...</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img class="center" src="https://i.gifer.com/ZKZg.gif" height=400px width=400px
+                         alt="Loading Gif">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
-
     </div>
 
-    <div id="nav-buttons">
-        <button id="next-page" type='button' class='btn btn-success' onclick="nextPage()">Continue</button>
-    </div>
 </div>

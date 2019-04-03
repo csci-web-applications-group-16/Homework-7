@@ -35,6 +35,24 @@ function renderBreadcrumbs() {
     $('#breadcrumbs').html(output);
 }
 
+function renderNavButtons() {
+    let prevDisabled = "";
+    let nextDisabled = "";
+
+    if (currentPageIndex <= 0) {
+        prevDisabled = "disabled";
+    }
+
+    if (currentPageIndex >= Object.keys(PAGES).length - 1) {
+        nextDisabled = "disabled";
+    }
+
+    let output = `<button id="previous-page" type='button' class='btn btn-success' ${prevDisabled} onclick="previousPage()">Previous</button>
+        <button id="next-page" type='button' class='btn btn-success' ${nextDisabled} onclick="nextPage()">Continue</button>`;
+
+    $('#nav-buttons').html(output);
+}
+
 function loadPage() {
     const key = Object.keys(PAGES)[currentPageIndex];
     $('#page-content').load(PAGES[key].url);
@@ -57,6 +75,7 @@ function nextPage() {
 
 function refresh() {
     renderBreadcrumbs();
+    renderNavButtons();
     loadPage();
 }
 
