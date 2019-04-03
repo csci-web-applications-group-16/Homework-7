@@ -1,41 +1,84 @@
-$(document).ready(function(){
-	$('#random_button').click(function(){
-		// it won't wait this complex one finishes
-		// the second get request will be done first
-		$.get( "/api/random_number_complex", function( data ) {
-	
-		  console.log("Complex random number api");
-		});
-		$.get( "/api/random_number", function( data ) {
-		  // you need to parse the required data first
-		  data_json = JSON.parse(data);
-		  $( "#random_num_p" ).text( data_json['number'] );
-		  console.log("random number api");
-		});
+const PAGES = {
+    'UPLOAD': {
+        'url': 'fragments/upload.htm'
+    },
+    'VERIFY': {
+        'url': 'fragments/verify.htm'
+    },
+    'CONFIGURE': {
+        'url': 'fragments/configure.htm'
+    },
+    'RUN TESTS': {
+        'url': 'fragments/tests.htm'
+    },
+    'REVIEW': {
+        'url': 'fragments/review.htm'
+    },
+};
 
+let currentPageIndex = 0;
 
-			$('#check_button_id').click(function(){
-		var get_url = '/api/process_csv/' + $('#lower_id').val().toString() + '/' + $('#upper_id').val().toString();
-		
-		$.get( get_url, function( data ) {
-		  data_obj = JSON.parse(data);
-		  console.log(data_obj['Temperature']);
-		});
-		
-});
+function renderBreadcrumbs() {
+    let output = "<ol class='breadcrumb'>";
+    let strings = Object.keys(PAGES);
 
-		// // place the second get request inside the first one
-		// // then these two get requests will be executed in order
-		// $.get( "/api/random_number_complex", function( data ) {
-	
-		//   console.log("Complex random number api");
-		//   $.get( "/api/random_number", function( data ) {
-		// 	  // you need to parse the required data first
-		// 	  data_json = JSON.parse(data);
-		// 	  $( "#random_num_p" ).text( data_json['number'] );
-		// 	  console.log("random number api");
-		// 	});
-		// });
-		
-	});
-});
+    for (let i = 0; i < strings.length; i++) {
+        if (i === currentPageIndex) {
+            output += `<li class='breadcrumb-item active' aria-current='page'>${strings[i]}</li>`;
+        } else {
+            output += `<li class='breadcrumb-item'>${strings[i]}</li>`;
+        }
+    }
+
+    output += '</ol>';
+
+    $('#breadcrumbs').html(output);
+}
+
+function renderNavButtons() {
+    let prevDisabled = "";
+    let nextDisabled = "";
+
+    if (currentPageIndex <= 0) {
+        prevDisabled = "disabled";
+    }
+
+    if (currentPageIndex >= Object.keys(PAGES).length - 1) {
+        nextDisabled = "disabled";
+    }
+
+    let output = `<button id="previous-page" type='button' class='btn btn-success' ${prevDisabled} onclick="previousPage()">Previous</button>
+        <button id="next-page" type='button' class='btn btn-success' ${nextDisabled} onclick="nextPage()">Continue</button>`;
+
+    $('#nav-buttons').html(output);
+}
+
+function loadPage() {
+    const key = Object.keys(PAGES)[currentPageIndex];
+    $('#page-content').load(PAGES[key].url);
+}
+
+function previousPage() {
+    currentPageIndex--;
+    if (currentPageIndex < 0) currentPageIndex = 0;
+
+    refresh();
+}
+
+function nextPage() {
+    currentPageIndex++;
+    const length = Object.keys(PAGES).length;
+    if (currentPageIndex >= length - 1) currentPageIndex = length - 1;
+
+    refresh();
+}
+
+function refresh() {
+    renderBreadcrumbs();
+    renderNavButtons();
+    loadPage();
+}
+
+window.onload = function () {
+    refresh();
+};

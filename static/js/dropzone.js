@@ -509,11 +509,11 @@ var Dropzone = function (_Emitter) {
           if (chunk) {
             return {
               dzuuid: chunk.file.upload.uuid,
-              dzchunkindex: chunk.index,
+              dzchunkindex: chunk.drop,
               dztotalfilesize: chunk.file.size,
               dzchunksize: this.options.chunkSize,
               dztotalchunkcount: chunk.file.upload.totalChunkCount,
-              dzchunkbyteoffset: chunk.index * this.options.chunkSize
+              dzchunkbyteoffset: chunk.drop * this.options.chunkSize
             };
           }
         },

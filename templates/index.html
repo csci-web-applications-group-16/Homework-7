@@ -1,39 +1,52 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang='en'>
 <head>
-    <title>Upload a CSV File</title>
-    <meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <meta charset='UTF-8'>
+    <title>CSCI Web Applications HW 6</title>
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'
+          integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>
+    <link rel="stylesheet" type="text/css" href="/static/css/index.css">
+
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'
+            integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM'
+            crossorigin='anonymous'></script>
+    <script src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
     <script src="/static/js/index.js"></script>
-        <script src="/static/js/dropzone.js"></script>
 
-            <link rel="stylesheet" type="text/css" href="/static/css/index.css">
+    <style type='text/css'>
+        .breadcrumb-item {
+            font-size: 25px;
+        }
 
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: '>' !important;
+        }
+
+        .breadcrumb > .active {
+            color: blue;
+        }
+    </style>
 </head>
 
-
 <body>
-    <h1>Upload new File</h1>
-    <!-- enctype defines how your form data will be encoded -->
-    <!-- multipart/form-data means no characters are encoded. -->
-    <!-- This is usually used when you are using forms to upload a file -->
-    <form method="post" enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
+<h1><span style='color: blue'>Web</span><span style='color: green'>Apps</span> <span style='color: blue'>HW</span><span
+        style='color: green'>5</span>
+</h1>
 
-<!-- DROP FORM -->
-<form id="my_dropzone" action="/api/post_csv" method='post' class="dropzone">
-    <div class="dz-default dz-message">
-        <span>Drop a csv file here to upload</span>
+<!--Loaded dynamically from index.js-->
+<nav id='breadcrumbs' aria-label='breadcrumb'>
+</nav>
+
+<div style='background-color: #FEF7C3; margin: 5px 50px 5px 50px; padding: 50px; border: 5px; border-radius: 10px'>
+    <div id="page-content">
+        <!--Loaded dynamically from index.js-->
     </div>
-</form>
+    <br>
+    <br>
+    <div id="nav-buttons">
 
+    </div>
+</div>
 
 </body>
 </html>
