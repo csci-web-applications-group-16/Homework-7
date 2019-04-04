@@ -1,12 +1,11 @@
 # example is based on http://flask.pocoo.org/docs/1.0/patterns/fileuploads/
 import os
-from email import header
 
+import pandas
 from flask import Flask, request, render_template
 from werkzeug.utils import secure_filename
 
 import util
-import pandas
 
 # Import -- Example 42
 # get current app directory
