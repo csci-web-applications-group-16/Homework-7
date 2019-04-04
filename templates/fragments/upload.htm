@@ -4,113 +4,41 @@
         crossorigin='anonymous'></script>
 <script src="/static/js/dropzone.js"></script>
 
-<div style=' margin: 50px 0 50px 0;'>
-    <p> A paragraph explaining the content of this website. A paragraph explaining the content of this website.
-        A paragraph explaining the content of this website. A paragraph explaining the content of this website.
-        A paragraph explaining the content of this website. A paragraph explaining the content of this website.</p>
+<p>Upload a csv file here! (For example, NRDC_data.csv)</p>
 
-    <div style=' margin: 50px 0 50px 0;'>
-        <h2 id="two" style=display:none;>
-            <img src="/static/images/ex3.png" alt="Drag and Drop File Into This Square">
-        </h2>
+<div style='background-color: #FEF7C3; margin: 5px 50px 5px 50px; padding: 50px; border: 5px; border-radius: 10px'>
+    <div id="uploader">
+        <h1>Upload data file (*.csv)</h1>
 
-        <div id="uploader">
-            <h1>Upload data file (*.csv)</h1>
+        <!-- DROP FORM -->
+        <form id="upload-file" method='post' action="/api/upload-file" class="dropzone">
+            <div class="dz-default dz-message">
+                <span>Drop a csv file here to upload</span>
+            </div>
+        </form>
+    </div>
 
-            <!-- DROP FORM -->
-            <form id="upload-file" method='post' action="/api/upload-file" class="dropzone">
-                <div class="dz-default dz-message">
-                    <span>Drop a csv file here to upload</span>
-                </div>
-            </form>
-        </div>
+    <div id="response">
 
     </div>
 
     <script>
-        function loadData() {
-            const x = document.getElementById("one");
-            const y = document.getElementById("two");
-            const w = document.getElementById("1");
-            const z = document.getElementById("2");
-            if (x.style.display === "none") {
-                x.style.display = "block";
-                w.style.display = "block";
-                y.style.display = "none";
-                z.style.display = "none";
-            } else {
-                w.style.display = "none";
-                x.style.display = "none";
-                y.style.display = "block";
-                z.style.display = "block";
-            }
-        }
-
         $(document).ready(function () {
             new Dropzone('#upload-file', {
-                acceptedFiles: '.csv'
-            });
-            $('#random_button').click(function () {
-                // it won't wait this complex one finishes
-                // the second get request will be done first
-                $.get("/api/random_number_complex", function (data) {
-
-                    console.log("Complex random number api");
-                });
-                $.get("/api/random_number", function (data) {
-                    // you need to parse the required data first
-                    data_json = JSON.parse(data);
-                    $("#random_num_p").text(data_json['number']);
-                    console.log("random number api");
-                });
-
-
-                $('#check_button_id').click(function () {
-                    var get_url = '/api/process_csv/' + $('#lower_id').val().toString() + '/' + $('#upper_id').val().toString();
-
-                    $.get(get_url, function (data) {
-                        data_obj = JSON.parse(data);
-                        console.log(data_obj['Temperature']);
+                acceptedFiles: '.csv',
+                maxFiles: 1,
+                success: function (file, response) {
+                    $('#response').html(`Woo, ${file.name} uploaded successfully! Bringing you to the next step...`);
+                    setTimeout(function () {
+                        nextPage();
+                    }, 2000);
+                },
+                init: function () {
+                    this.on("maxfilesexceeded", function (file) {
+                        alert("No more files please!");
                     });
-
-                });
-
-                // // place the second get request inside the first one
-                // // then these two get requests will be executed in order
-                // $.get( "/api/random_number_complex", function( data ) {
-
-                //   console.log("Complex random number api");
-                //   $.get( "/api/random_number", function( data ) {
-                // 	  // you need to parse the required data first
-                // 	  data_json = JSON.parse(data);
-                // 	  $( "#random_num_p" ).text( data_json['number'] );
-                // 	  console.log("random number api");
-                // 	});
-                // });
-
+                }
             });
         });
-
     </script>
-
-    <div class="modal fade" id="modal-window" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class=" modal-title" id="modal-title">Uploading...</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <img class="center" src="https://i.gifer.com/ZKZg.gif" height=400px width=400px
-                         alt="Loading Gif">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </div>
