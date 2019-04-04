@@ -4,7 +4,7 @@
         crossorigin='anonymous'></script>
 <script src="/static/js/dropzone.js"></script>
 
-<p>Upload a csv file here! (For example, NRDC_data.csv)</p>
+<h3>Upload a csv file here! (For example, NRDC_data.csv). <br> NOTE: This app requires cookies to be enabled!</h3>
 
 <div style='background-color: #FEF7C3; margin: 5px 50px 5px 50px; padding: 50px; border: 5px; border-radius: 10px'>
     <div id="uploader">
@@ -27,14 +27,15 @@
             new Dropzone('#upload-file', {
                 acceptedFiles: '.csv',
                 maxFiles: 1,
-                success: function (file, response) {
+                success: function (file) {
                     $('#response').html(`Woo, ${file.name} uploaded successfully! Bringing you to the next step...`);
                     setTimeout(function () {
+                        setCookie("uploaded-file", file.name);
                         nextPage();
                     }, 2000);
                 },
                 init: function () {
-                    this.on("maxfilesexceeded", function (file) {
+                    this.on("maxfilesexceeded", function () {
                         alert("No more files please!");
                     });
                 }

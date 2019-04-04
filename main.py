@@ -1,10 +1,12 @@
 # example is based on http://flask.pocoo.org/docs/1.0/patterns/fileuploads/
 import os
+from email import header
 
 from flask import Flask, request, render_template
 from werkzeug.utils import secure_filename
 
 import util
+import pandas
 
 # Import -- Example 42
 # get current app directory
@@ -43,7 +45,6 @@ def upload_file():
             log = 'no file field in request.'
             return render_template('fail.html', log=log)
 
-        # print(request.files['file'])
         file = request.files['file']
 
         # if user does not select file, browser also
@@ -62,6 +63,13 @@ def upload_file():
 
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return render_template('success.html', filename=filename)
+
+
+@app.route('/api/request-data', methods=['GET'])
+def request_parsed_file():
+    filename = request.args.get('filename')
+    data = pandas.read_csv(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    return data.to_json()
 
 
 if __name__ == '__main__':
