@@ -149,8 +149,6 @@
                 let mean = 0.0;
                 let max = vals[0];
                 let min = vals[0];
-                // let sd = math.std(vals);
-                let sd;
                 vals.forEach((val) => {
                     mean += val;
                     if (val > max) {
@@ -162,6 +160,11 @@
 
                 })
                 mean /= vals.length;
+
+                // Standard deviation code adapted from https://dustinpfister.github.io/2018/02/20/statistics-standard-deviation/
+                let sd = Math.sqrt(vals.reduce(function (sq, n) {
+                    return sq + Math.pow(n - mean, 2);
+                }, 0) / (vals.length - 1));
 
                 let units;
                 let type;
@@ -337,8 +340,8 @@
         </script>
 
         <div id="nav-buttons">
-            <button id="previous-page" type='button' class='btn btn-success' onclick="window.location.assign('/verify.html');">Previous</button>
-            <button id="next-page" type='button' class='btn btn-success' onclick="window.location.assign('/tests.html');">Continue</button>
+            <button id="previous-page" type='button' class='btn btn-success' onclick="window.location.assign('/verify.html')">Previous</button>
+            <button id="next-page" type='button' class='btn btn-success' onclick="window.location.assign('/tests.html')">Continue</button>
         </div>
     </div>
 </div>
