@@ -1,17 +1,26 @@
 <style>
     /* The Modal (background) */
     .modal {
-        display: none; /* Hidden by default */
-        position: fixed; /* Stay in place */
-        z-index: 1; /* Sit on top */
-        padding-top: 100px; /* Location of the box */
+        display: none;
+        /* Hidden by default */
+        position: fixed;
+        /* Stay in place */
+        z-index: 1;
+        /* Sit on top */
+        padding-top: 100px;
+        /* Location of the box */
         left: 0;
         top: 0;
-        width: 100%; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
-        background-color: rgb(0, 0, 0); /* Fallback color */
-        background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+        width: 100%;
+        /* Full width */
+        height: 100%;
+        /* Full height */
+        overflow: auto;
+        /* Enable scroll if needed */
+        background-color: rgb(0, 0, 0);
+        /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4);
+        /* Black w/ opacity */
     }
 
     /* Modal Content */
@@ -76,39 +85,103 @@
         clear: both;
         display: table;
     }
+
 </style>
+
+<script>
+    function getDataCols()
+    {
+        return getCookie('data_cols').split(',');
+    }
+
+    function updateDataFields()
+    {
+        let data_cols = getDataCols();
+        data_cols.forEach(element =>
+        {
+            $("#data_fields").append(`<option class="p-2" value="${element}">${element}</option>`);
+        });
+    }
+
+    function populateMetaData(data)
+    {
+        $("#data_info").empty();
+
+        let key = $("#data_fields").children("option:selected").val();
+        let vals = Object.values(data[key]);
+        let mean = 0.0;
+        let max = vals[0];
+        let min = vals[0];
+        // let sd = math.std(vals);
+        let sd;
+        vals.forEach((val) =>
+        {
+            mean += val;
+            if(val > max)
+            {
+                max = val;
+            }
+            if(val < min)
+            {
+                val = min;
+            }
+
+        })
+        mean /= vals.length;
+
+        let units;
+        let type;
+        let time_units;
+        let category;
+        let interval;
+
+        $("#data_info").append(`<option class="p-2" value="name">Name: ${key}</option>`);
+        $("#data_info").append(`<option class="p-2" value="mean">Mean: ${mean}</option>`);
+        $("#data_info").append(`<option class="p-2" value="SD">SD: ${sd}</option>`);
+        $("#data_info").append(`<option class="p-2" value="max">Greatest Value: ${max}</option>`);
+        $("#data_info").append(`<option class="p-2" value="min">Lowest Value: ${mean}</option>`);
+        $("#data_info").append(`<option class="p-2" value="units">Units: ${units}</option>`);
+        $("#data_info").append(`<option class="p-2" value="type">Data Type: ${type}</option>`);
+        $("#data_info").append(`<option class="p-2" value="time_units">Time Units Name: ${time_units}</option>`);
+        $("#data_info").append(`<option class="p-2" value="category">General Category: ${category}</option>`);
+        $("#data_info").append(`<option class="p-2" value="interval">Time Interval: ${interval}</option>`);
+
+    }
+
+    /**
+     *  Request data from the api.
+     */
+    function updateMetaData()
+    {
+        let cookie = getCookie("uploaded-file");
+        $.get(`/api/request-data?filename=${cookie}`, function(data)
+        {
+            console.log("Requesting file data for: " + cookie);
+            data = JSON.parse(data);
+            console.log(data);
+            populateMetaData(data);
+        });
+    }
+
+    $(document).ready(function()
+    {
+        updateDataFields();
+    })
+</script>
 
 <div class="row">
     <div class="column">
         <h2> Data Fields</h2>
 
-        <table style=height:500px;Width:90%;border:2px;background-color:#D3D3D3;>
-            <tr style=background-color:blue;>
-                <td>Data1</td>
-            </tr>
-            <tr>
-                <td>Data2</td>
-            </tr>
-            <tr>
-                <td>Data3</td>
-            </tr>
-            <tr>
-                <td>Data4</td>
-            </tr>
-            <tr>
-                <td>Data5</td>
-            </tr>
-            <tr>
-                <td>Data6</td>
-            </tr>
-        </table>
+        <select multiple style=height:500px;Width:90%;border:2px; id="data_fields" onChange="updateMetaData()">
+
+        </select>
     </div>
 
     <div class="column">
         <h2>Data Field Info</h2>
 
-        <p style=height:400px;Width:90%;background-color:#D3D3D3;>Name:Info<br>Mean:Info<br>Lowest:Info<br>Heighest:Info<br>
-            Earliest:Info<br>Time:Info<br><br></p>
+        <select id="data_info" multiple style=height:400px;Width:90%;></select>
 
         <!-- Trigger/Open The Modal -->
         <button id="myBtn" style=background-color:green;width:25%;>Modify</button>
@@ -167,13 +240,13 @@
                     <div style=position:absolute;left:900px;top:100px;>
                         <h2>Type</h2>
                         <div><label>
-                            <select>
-                                <option value=""></option>
-                                <option value="Type1">Type1</option>
-                                <option value="Type2">Type2</option>
-                                <option value="Type3">Type3</option>
-                            </select>
-                        </label></div>
+                                <select>
+                                    <option value=""></option>
+                                    <option value="Type1">Type1</option>
+                                    <option value="Type2">Type2</option>
+                                    <option value="Type3">Type3</option>
+                                </select>
+                            </label></div>
                     </div>
                 </div>
                 <div class="row">
@@ -207,26 +280,32 @@
     span = document.getElementsByClassName("close")[0];
     span2 = document.getElementById('c');
 
-    // When the user clicks the button, open the modal 
-    btn.onclick = function () {
+    // When the user clicks the button, open the modal
+    btn.onclick = function()
+    {
         modal.style.display = "block";
     };
 
-    btn1.onclick = function () {
+    btn1.onclick = function()
+    {
         modal1.style.display = "block";
     };
 
     // When the user clicks on <span> (x), close the modal
-    span.onclick = function () {
+    span.onclick = function()
+    {
         modal.style.display = "none";
     };
-    span2.onclick = function () {
+    span2.onclick = function()
+    {
         modal1.style.display = "none";
     };
 
     // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target === modal) {
+    window.onclick = function(event)
+    {
+        if(event.target === modal)
+        {
             modal.style.display = "none";
         }
     }
