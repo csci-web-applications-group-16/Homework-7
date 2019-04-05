@@ -10,29 +10,45 @@
     th {
         padding: .1rem .5rem .1rem .5rem !important;
     }
+
 </style>
 
 <script>
-    function addToDataCol() {
-        $("#select-data-col").children("option:selected").each(function (i) {
+    function updateDataColCookie()
+    {
+        var data_cols = [];
+        Array.prototype.forEach.call($("#data-col")[0].options, function(o) {data_cols.push(o.value);});
+        setCookie('data_cols', data_cols);
+    }
+
+    function addToDataCol()
+    {
+        $("#select-data-col").children("option:selected").each(function(i)
+        {
             $("#data-col").append($(this));
             $('#time-col option[value="' + $(this).val() + '"]').remove();
         });
+        updateDataColCookie();
     }
 
-    function addToDetected() {
+    function addToDetected()
+    {
         let selected = $("#data-col").children("option:selected").remove();
 
         $("#select-data-col").append(selected.clone());
         $('#time-col').append(selected.clone());
+        updateDataColCookie();
     }
 
-    function disableContinue() {
+    function disableContinue()
+    {
         let btn = $("#continue-btn");
-        if ($("#time-col").val().length > 0) {
+        if($("#time-col").val().length > 0)
+        {
             btn.removeAttr("disabled");
             btn.css("background-color", "green");
-        } else {
+        } else
+        {
             btn.attr("disabled", "disabled");
             btn.css("background-color", "grey");
         }
@@ -41,9 +57,11 @@
     /**
      *  Request data from the api.
      */
-    function requestData() {
+    function requestData()
+    {
         let cookie = getCookie("uploaded-file");
-        $.get(`/api/request-data?filename=${cookie}`, function (data) {
+        $.get(`/api/request-data?filename=${cookie}`, function(data)
+        {
             console.log("Requesting file data for: " + cookie);
             data = JSON.parse(data);
             console.log(data);
@@ -51,11 +69,19 @@
         });
     }
 
+    function verifyNext()
+    {
+        var data_cols = [];
+        Array.prototype.forEach.call($("#data-col")[0].options, function(o) {data_cols.push(o.value);});
+        setCookie('data_cols', data_cols);
+    }
+
     /**
      * Take a json CSV generated from pandas and parse it
      * @param json
      */
-    function loadTables(json) {
+    function loadTables(json)
+    {
         let headers = Object.keys(json);
         let headerHtml = "";
         let dataColHtml = "";
@@ -65,7 +91,8 @@
 
         //Load headers into the header columns
 
-        for (let i = 0; i < headers.length; i++) {
+        for(let i = 0; i < headers.length; i++)
+        {
             let head = headers[i];
             headerHtml += `<th>${head}</th>`;
             dataColHtml += `<option class="p-2" value="${head}">${head}</option>`;
@@ -81,10 +108,12 @@
         $("#time-col").html(timeColHtml);
 
         //Load the data into the table
-        for (let i = 0; i < values[0].length; i++) {
+        for(let i = 0; i < values[0].length; i++)
+        {
             let tableRow = "<tr>";
 
-            for (let j = 0; j < headers.length; j++) {
+            for(let j = 0; j < headers.length; j++)
+            {
                 let val = values[j][i];
                 tableRow += `<td>${val}</td>`
             }
@@ -96,7 +125,8 @@
         $("#data-body").html(bodyHtml);
     }
 
-    $(document).ready(function () {
+    $(document).ready(function()
+    {
         requestData();
     })
 </script>
@@ -106,8 +136,8 @@
     <div style="max-height: 25vh; overflow: auto;" class="table-responsive">
         <table class="table table-hover">
             <thead>
-            <tr id="data-headers">
-            </tr>
+                <tr id="data-headers">
+                </tr>
             </thead>
             <tbody id="data-body">
             </tbody>
@@ -116,8 +146,7 @@
 </div>
 <div class="container" style="margin: 25px;">
     <div class="row justify-content-between">
-        <div class="container col-8 pt-2 ml-0"
-             style="border-radius: 5px; border-style: solid; border-color: grey ; border-width: 1px; background-color:#ADD8E6; ">
+        <div class="container col-8 pt-2 ml-0" style="border-radius: 5px; border-style: solid; border-color: grey ; border-width: 1px; background-color:#ADD8E6; ">
             <div class="row h-100">
                 <div class="col-5">
                     <div class="form-group d-flex flex-column h-100" style="padding-bottom: 10px">
@@ -129,15 +158,11 @@
                 <div class="col-2">
                     <div class=" d-flex align-items-center align-content-around flex-column" style="min-height:100%">
                         <div class="p-2" style="margin-top:auto; margin-bottom: 2%">
-                            <button onclick="addToDataCol()"
-                                    style="background-color:#e6f4fd; border-color: #E1EEFC; border-radius: 5px"
-                                    type="button">&gt;
+                            <button onclick="addToDataCol()" style="background-color:#e6f4fd; border-color: #E1EEFC; border-radius: 5px" type="button">&gt;
                             </button>
                         </div>
                         <div class="p-2" style="margin-bottom:auto; margin-top: 2%">
-                            <button onclick="addToDetected()"
-                                    style="background-color:#e6f4fd; border-color: #E1EEFC;border-radius: 5px"
-                                    type="button">&lt;
+                            <button onclick="addToDetected()" style="background-color:#e6f4fd; border-color: #E1EEFC;border-radius: 5px" type="button">&lt;
                             </button>
                         </div>
                     </div>
@@ -158,15 +183,12 @@
                 <select multiple class="form-control p-0" id="time-col" onChange="disableContinue()">
                 </select>
             </div>
-            <button type="button" id="continue-btn" class="btn btn-secondary w-100 mt-3" style="background-color: grey"
-                    onclick="nextPage()"
-                    disabled>
+            <button type="button" id="continue-btn" class="btn btn-secondary w-100 mt-3" style="background-color: grey" onclick="nextPage()" disabled>
                 Continue
             </button>
         </div>
     </div>
 </div>
-
 
 <div id="nav-buttons">
     <button id="previous-page" type='button' class='btn btn-success' onclick="previousPage()">Previous</button>
