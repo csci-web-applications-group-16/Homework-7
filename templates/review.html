@@ -48,112 +48,6 @@
 
         <div style="margin: 50px 0 50px 0;">
             <h1>Test Results</h1><br>
-            <script>
-                chart = new CanvasJS.Chart("chart_container", {
-                    animationEnabled: true,
-                    theme: "light2",
-                    title: {
-                        text: "Graph"
-                    },
-                    axisX: {
-                        valueFormatString: "MMM"
-                    },
-                    axisY: {
-                        suffix: " age",
-                        labelFormatter: addSymbols
-                    },
-                    toolTip: {
-                        shared: true
-                    },
-                    legend: {
-                        cursor: "pointer",
-                        itemclick: toggleDataSeries
-                    },
-                    data: [
-                        {
-                            type: "column",
-                            name: "Age",
-                            showInLegend: true,
-                            xValueFormatString: "MMMM YYYY",
-                            yValueFormatString: "###0",
-                            dataPoints: [
-                                {x: new Date(919, 0), y: 200},
-                                {x: new Date(1019, 0), y: 300},
-                                {x: new Date(1119, 0), y: 250},
-                                {x: new Date(1219, 0), y: 700,},
-                                {x: new Date(1319, 0), y: 500},
-                                {x: new Date(1419, 0), y: 350},
-                                {x: new Date(1519, 0), y: 500},
-                                {x: new Date(1619, 0), y: 430},
-                                {x: new Date(1719, 0), y: 350},
-                                {x: new Date(1819, 0), y: 600},
-                                {x: new Date(1919, 0), y: 400},
-                                {x: new Date(2019, 0), y: 500}
-                            ]
-                        },
-                        {
-                            type: "line",
-                            name: "Immunity to Garlic",
-                            showInLegend: true,
-                            yValueFormatString: "###0",
-                            dataPoints: [
-                                {x: new Date(919, 0), y: 200},
-                                {x: new Date(1019, 0), y: 200},
-                                {x: new Date(1119, 0), y: 250},
-                                {x: new Date(1219, 0), y: 300,},
-                                {x: new Date(1319, 0), y: 300},
-                                {x: new Date(1419, 0), y: 350},
-                                {x: new Date(1519, 0), y: 300},
-                                {x: new Date(1619, 0), y: 430},
-                                {x: new Date(1719, 0), y: 350},
-                                {x: new Date(1819, 0), y: 300},
-                                {x: new Date(1919, 0), y: 400},
-                                {x: new Date(2019, 0), y: 500}
-                            ]
-                        },
-                        {
-                            type: "area",
-                            name: "Complexion",
-                            markerBorderColor: "white",
-                            markerBorderThickness: 2,
-                            showInLegend: true,
-                            yValueFormatString: "###0",
-                            dataPoints: [
-                                {x: new Date(919, 0), y: 200},
-                                {x: new Date(1019, 0), y: 300},
-                                {x: new Date(1119, 0), y: 250},
-                                {x: new Date(1219, 0), y: 400,},
-                                {x: new Date(1319, 0), y: 500},
-                                {x: new Date(1419, 0), y: 350},
-                                {x: new Date(1519, 0), y: 300},
-                                {x: new Date(1619, 0), y: 430},
-                                {x: new Date(1719, 0), y: 350},
-                                {x: new Date(1819, 0), y: 300},
-                                {x: new Date(1919, 0), y: 400},
-                                {x: new Date(2019, 0), y: 500}
-                            ]
-                        }]
-                });
-
-                chart.render();
-
-                function addSymbols(e) {
-                    const suffixes = ["", "K", "M", "B"];
-                    let order = Math.max(Math.floor(Math.log(e.value) / Math.log(1000)), 0);
-
-                    if (order > suffixes.length - 1)
-                        order = suffixes.length - 1;
-
-                    const suffix = suffixes[order];
-                    return CanvasJS.formatNumber(e.value / Math.pow(1000, order)) + suffix;
-                }
-
-                function toggleDataSeries(e) {
-                    e.dataSeries.visible = !(typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible);
-                    e.chart.render();
-                }
-            </script>
-
             <div id="chart_container" style="height: 300px; width: 100%;"></div>
         </div>
 
@@ -162,11 +56,168 @@
                     onclick="window.location.assign('/tests.html')">Previous
             </button>
             <button id="next-page" type='button' class='btn btn-success'
-                    onclick="window.location.assign('/index.html')">Start Over
+                    onclick="window.location.assign('/')">Start Over
             </button>
         </div>
     </div>
 </div>
+
+<script>
+    let chartData;
+
+    /**
+     *  Request data from the api.
+     */
+    function requestData() {
+        let cookie = getCookie("uploaded-file");
+        $.get(`/api/request-data?filename=${cookie}`, function (data) {
+            console.log("Requesting file data for: " + cookie);
+            data = JSON.parse(data);
+            console.log(data);
+            loadChart(data);
+        });
+    }
+
+    /**
+     * Take a json CSV generated from pandas and parse it
+     * @param json
+     */
+    function loadChart(json) {
+        let headers = Object.keys(json);
+        let values = [];
+        let data = [];
+
+        //Load headers into the header columns
+        for (let i = 0; i < headers.length; i++) {
+            let headElement = json[headers[i]];
+            let strings = Object.values(headElement);
+            values.push(strings);
+        }
+
+        //Load the data into the table
+        for (let i = 0; i < values[0].length; i++) {
+            let tableRow = "<tr>";
+
+            for (let j = 0; j < headers.length; j++) {
+                let val = values[j][i];
+                tableRow += `<td>${val}</td>`
+            }
+
+            tableRow += "</tr>";
+        }
+    }
+
+    {#data: [#}
+    {#        {#}
+    {#            type: "column",#}
+    {#            name: "Age",#}
+    {#            showInLegend: true,#}
+    {#            xValueFormatString: "MMMM YYYY",#}
+    {#            yValueFormatString: "###0",#}
+    {#            dataPoints: [#}
+    {#                {x: new Date(919, 0), y: 200},#}
+    {#                {x: new Date(1019, 0), y: 300},#}
+    {#                {x: new Date(1119, 0), y: 250},#}
+    {#                {x: new Date(1219, 0), y: 700,},#}
+    {#                {x: new Date(1319, 0), y: 500},#}
+    {#                {x: new Date(1419, 0), y: 350},#}
+    {#                {x: new Date(1519, 0), y: 500},#}
+    {#                {x: new Date(1619, 0), y: 430},#}
+    {#                {x: new Date(1719, 0), y: 350},#}
+    {#                {x: new Date(1819, 0), y: 600},#}
+    {#                {x: new Date(1919, 0), y: 400},#}
+    {#                {x: new Date(2019, 0), y: 500}#}
+    {#            ]#}
+    {#        },#}
+    {#        {#}
+    {#            type: "line",#}
+    {#            name: "Immunity to Garlic",#}
+    {#            showInLegend: true,#}
+    {#            yValueFormatString: "###0",#}
+    {#            dataPoints: [#}
+    {#                {x: new Date(919, 0), y: 200},#}
+    {#                {x: new Date(1019, 0), y: 200},#}
+    {#                {x: new Date(1119, 0), y: 250},#}
+    {#                {x: new Date(1219, 0), y: 300,},#}
+    {#                {x: new Date(1319, 0), y: 300},#}
+    {#                {x: new Date(1419, 0), y: 350},#}
+    {#                {x: new Date(1519, 0), y: 300},#}
+    {#                {x: new Date(1619, 0), y: 430},#}
+    {#                {x: new Date(1719, 0), y: 350},#}
+    {#                {x: new Date(1819, 0), y: 300},#}
+    {#                {x: new Date(1919, 0), y: 400},#}
+    {#                {x: new Date(2019, 0), y: 500}#}
+    {#            ]#}
+    {#        },#}
+    {#        {#}
+    {#            type: "area",#}
+    {#            name: "Complexion",#}
+    {#            markerBorderColor: "white",#}
+    {#            markerBorderThickness: 2,#}
+    {#            showInLegend: true,#}
+    {#            yValueFormatString: "###0",#}
+    {#            dataPoints: [#}
+    {#                {x: new Date(919, 0), y: 200},#}
+    {#                {x: new Date(1019, 0), y: 300},#}
+    {#                {x: new Date(1119, 0), y: 250},#}
+    {#                {x: new Date(1219, 0), y: 400,},#}
+    {#                {x: new Date(1319, 0), y: 500},#}
+    {#                {x: new Date(1419, 0), y: 350},#}
+    {#                {x: new Date(1519, 0), y: 300},#}
+    {#                {x: new Date(1619, 0), y: 430},#}
+    {#                {x: new Date(1719, 0), y: 350},#}
+    {#                {x: new Date(1819, 0), y: 300},#}
+    {#                {x: new Date(1919, 0), y: 400},#}
+    {#                {x: new Date(2019, 0), y: 500}#}
+    {#            ]#}
+    {#        }]#}
+
+    $(document).ready(function () {
+        requestData();
+
+        chart = new CanvasJS.Chart("chart_container", {
+            animationEnabled: true,
+            theme: "light2",
+            title: {
+                text: "Graph"
+            },
+            axisX: {
+                valueFormatString: "MMM"
+            },
+            axisY: {
+                suffix: " age",
+                labelFormatter: addSymbols
+            },
+            toolTip: {
+                shared: true
+            },
+            legend: {
+                cursor: "pointer",
+                itemclick: toggleDataSeries
+            },
+            data: chartData
+        });
+    });
+
+
+    chart.render();
+
+    function addSymbols(e) {
+        const suffixes = ["", "K", "M", "B"];
+        let order = Math.max(Math.floor(Math.log(e.value) / Math.log(1000)), 0);
+
+        if (order > suffixes.length - 1)
+            order = suffixes.length - 1;
+
+        const suffix = suffixes[order];
+        return CanvasJS.formatNumber(e.value / Math.pow(1000, order)) + suffix;
+    }
+
+    function toggleDataSeries(e) {
+        e.dataSeries.visible = !(typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible);
+        e.chart.render();
+    }
+</script>
 
 </body>
 </html>

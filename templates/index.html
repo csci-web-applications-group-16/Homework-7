@@ -64,32 +64,32 @@
             <div id="response">
 
             </div>
-
-            <script>
-                Dropzone.autoDiscover = false;
-
-                new Dropzone('#upload-file', {
-                    acceptedFiles: '.csv',
-                    maxFiles: 1,
-                    success: function (file) {
-                        $('#response').html(`Woo, ${file.name} uploaded successfully! Bringing you to the next step...`);
-                        setTimeout(function () {
-                            setCookie("uploaded-file", file.name);
-                            window.location.assign("/verify.html");
-                        }, 2000);
-                    },
-                    init: function () {
-                        this.on("maxfilesexceeded", function () {
-                            alert("No more files please!");
-                        });
-                    }
-                });
-            </script>
         </div>
     </div>
     <br>
     <br>
 </div>
 
+
+<script>
+    Dropzone.autoDiscover = false;
+
+    new Dropzone('#upload-file', {
+        acceptedFiles: '.csv',
+        maxFiles: 1,
+        success: function (file) {
+            $('#response').html(`Woo, ${file.name} uploaded successfully! Bringing you to the next step...`);
+            setTimeout(function () {
+                setCookie("uploaded-file", file.name);
+                window.location.assign("/verify.html");
+            }, 2000);
+        },
+        init: function () {
+            this.on("maxfilesexceeded", function () {
+                alert("No more files please!");
+            });
+        }
+    });
+</script>
 </body>
 </html>
