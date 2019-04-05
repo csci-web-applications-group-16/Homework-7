@@ -33,8 +33,14 @@
         style='color: green'>6</span>
 </h1>
 
-<!--Loaded dynamically from index.js-->
 <nav id='breadcrumbs' aria-label='breadcrumb'>
+    <ol class='breadcrumb'>
+        <li class='breadcrumb-item'>UPLOAD</li>
+        <li class='breadcrumb-item'>VERIFY</li>
+        <li class='breadcrumb-item active' aria-current='page'>CONFIGURE</li>
+        <li class='breadcrumb-item'>RUN TESTS</li>
+        <li class='breadcrumb-item'>REVIEW</li>
+    </ol>
 </nav>
 
 <div style='background-color: #FEF7C3; margin: 5px 50px 5px 50px; padding: 50px; border: 5px; border-radius: 10px'>
@@ -340,8 +346,12 @@
         </script>
 
         <div id="nav-buttons">
-            <button id="previous-page" type='button' class='btn btn-success' onclick="window.location.assign('/verify.html')">Previous</button>
-            <button id="next-page" type='button' class='btn btn-success' onclick="window.location.assign('/tests.html')">Continue</button>
+            <button id="previous-page" type='button' class='btn btn-success'
+                    onclick="window.location.assign('/verify.html')">Previous
+            </button>
+            <button id="next-page" type='button' class='btn btn-success'
+                    onclick="window.location.assign('/tests.html')">Continue
+            </button>
         </div>
     </div>
 </div>
