@@ -2,16 +2,15 @@
 <html lang='en'>
 <head>
     <meta charset='UTF-8'>
-    <title>CSCI Web Applications HW 6</title>
+    <title>CSCI Web Applications HW 6 - Upload</title>
     <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'
           integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>
     <link rel="stylesheet" type="text/css" href="/static/css/index.css">
-
     <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'
             integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM'
             crossorigin='anonymous'></script>
     <script src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
-    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="/static/js/dropzone.js"></script>
     <script src="/static/js/index.js"></script>
 
     <style type='text/css'>
@@ -36,11 +35,58 @@
 
 <!--Loaded dynamically from index.js-->
 <nav id='breadcrumbs' aria-label='breadcrumb'>
+    <ol class='breadcrumb'>
+        <li class='breadcrumb-item active' aria-current='page'>UPLOAD</li>
+        <li class='breadcrumb-item'>VERIFY</li>
+        <li class='breadcrumb-item'>CONFIGURE</li>
+        <li class='breadcrumb-item'>RUN TESTS</li>
+        <li class='breadcrumb-item'>REVIEW</li>
+    </ol>
 </nav>
 
 <div style='background-color: #FEF7C3; margin: 5px 50px 5px 50px; padding: 50px; border: 5px; border-radius: 10px'>
     <div id="page-content">
-        <!--Loaded dynamically from index.js-->
+        <!-- Written by afoster2373 -->
+        <h3>Upload a csv file here! (For example, NRDC_data.csv). <br> NOTE: This app requires cookies to be enabled!
+        </h3>
+
+        <div style='background-color: #FEF7C3; margin: 5px 50px 5px 50px; padding: 50px; border: 5px; border-radius: 10px'>
+            <div id="uploader">
+                <h1>Upload data file (*.csv)</h1>
+
+                <!-- DROP FORM -->
+                <form id="upload-file" method='post' action="/api/upload-file" class="dropzone">
+                    <div class="dz-default dz-message">
+                        <span>Drop a csv file here to upload</span>
+                    </div>
+                </form>
+            </div>
+
+            <div id="response">
+
+            </div>
+
+            <script>
+                Dropzone.autoDiscover = false;
+
+                new Dropzone('#upload-file', {
+                    acceptedFiles: '.csv',
+                    maxFiles: 1,
+                    success: function (file) {
+                        $('#response').html(`Woo, ${file.name} uploaded successfully! Bringing you to the next step...`);
+                        setTimeout(function () {
+                            setCookie("uploaded-file", file.name);
+                            window.location.assign("/verify.html");
+                        }, 2000);
+                    },
+                    init: function () {
+                        this.on("maxfilesexceeded", function () {
+                            alert("No more files please!");
+                        });
+                    }
+                });
+            </script>
+        </div>
     </div>
     <br>
     <br>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>CSCI Web Applications HW 6 - Review</title>
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'
+          integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>
+    <link rel="stylesheet" type="text/css" href="/static/css/index.css">
+
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'
+            integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM'
+            crossorigin='anonymous'></script>
+    <script src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="/static/js/index.js"></script>
+
+    <style type='text/css'>
+        .breadcrumb-item {
+            font-size: 25px;
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: '>' !important;
+        }
+
+        .breadcrumb > .active {
+            color: blue;
+        }
+    </style>
+</head>
+
+<body>
+<h1><span style='color: blue'>Web</span><span style='color: green'>Apps</span> <span style='color: blue'>HW</span><span
+        style='color: green'>6</span>
+</h1>
+
+<!--Loaded dynamically from index.js-->
+<nav id='breadcrumbs' aria-label='breadcrumb'>
+</nav>
+
+<div style='background-color: #FEF7C3; margin: 5px 50px 5px 50px; padding: 50px; border: 5px; border-radius: 10px'>
+    <div id="page-content">
+
+        <div style="margin: 50px 0 50px 0;">
+            <h1>Test Results</h1><br>
+            <script>
+                chart = new CanvasJS.Chart("chart_container", {
+                    animationEnabled: true,
+                    theme: "light2",
+                    title: {
+                        text: "Graph"
+                    },
+                    axisX: {
+                        valueFormatString: "MMM"
+                    },
+                    axisY: {
+                        suffix: " age",
+                        labelFormatter: addSymbols
+                    },
+                    toolTip: {
+                        shared: true
+                    },
+                    legend: {
+                        cursor: "pointer",
+                        itemclick: toggleDataSeries
+                    },
+                    data: [
+                        {
+                            type: "column",
+                            name: "Age",
+                            showInLegend: true,
+                            xValueFormatString: "MMMM YYYY",
+                            yValueFormatString: "###0",
+                            dataPoints: [
+                                {x: new Date(919, 0), y: 200},
+                                {x: new Date(1019, 0), y: 300},
+                                {x: new Date(1119, 0), y: 250},
+                                {x: new Date(1219, 0), y: 700,},
+                                {x: new Date(1319, 0), y: 500},
+                                {x: new Date(1419, 0), y: 350},
+                                {x: new Date(1519, 0), y: 500},
+                                {x: new Date(1619, 0), y: 430},
+                                {x: new Date(1719, 0), y: 350},
+                                {x: new Date(1819, 0), y: 600},
+                                {x: new Date(1919, 0), y: 400},
+                                {x: new Date(2019, 0), y: 500}
+                            ]
+                        },
+                        {
+                            type: "line",
+                            name: "Immunity to Garlic",
+                            showInLegend: true,
+                            yValueFormatString: "###0",
+                            dataPoints: [
+                                {x: new Date(919, 0), y: 200},
+                                {x: new Date(1019, 0), y: 200},
+                                {x: new Date(1119, 0), y: 250},
+                                {x: new Date(1219, 0), y: 300,},
+                                {x: new Date(1319, 0), y: 300},
+                                {x: new Date(1419, 0), y: 350},
+                                {x: new Date(1519, 0), y: 300},
+                                {x: new Date(1619, 0), y: 430},
+                                {x: new Date(1719, 0), y: 350},
+                                {x: new Date(1819, 0), y: 300},
+                                {x: new Date(1919, 0), y: 400},
+                                {x: new Date(2019, 0), y: 500}
+                            ]
+                        },
+                        {
+                            type: "area",
+                            name: "Complexion",
+                            markerBorderColor: "white",
+                            markerBorderThickness: 2,
+                            showInLegend: true,
+                            yValueFormatString: "###0",
+                            dataPoints: [
+                                {x: new Date(919, 0), y: 200},
+                                {x: new Date(1019, 0), y: 300},
+                                {x: new Date(1119, 0), y: 250},
+                                {x: new Date(1219, 0), y: 400,},
+                                {x: new Date(1319, 0), y: 500},
+                                {x: new Date(1419, 0), y: 350},
+                                {x: new Date(1519, 0), y: 300},
+                                {x: new Date(1619, 0), y: 430},
+                                {x: new Date(1719, 0), y: 350},
+                                {x: new Date(1819, 0), y: 300},
+                                {x: new Date(1919, 0), y: 400},
+                                {x: new Date(2019, 0), y: 500}
+                            ]
+                        }]
+                });
+
+                chart.render();
+
+                function addSymbols(e) {
+                    const suffixes = ["", "K", "M", "B"];
+                    let order = Math.max(Math.floor(Math.log(e.value) / Math.log(1000)), 0);
+
+                    if (order > suffixes.length - 1)
+                        order = suffixes.length - 1;
+
+                    const suffix = suffixes[order];
+                    return CanvasJS.formatNumber(e.value / Math.pow(1000, order)) + suffix;
+                }
+
+                function toggleDataSeries(e) {
+                    e.dataSeries.visible = !(typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible);
+                    e.chart.render();
+                }
+            </script>
+
+            <div id="chart_container" style="height: 300px; width: 100%;"></div>
+        </div>
+
+        <div id="nav-buttons">
+            <button id="previous-page" type='button' class='btn btn-success'
+                    onclick="window.location.assign('/tests.html')">Previous
+            </button>
+            <button id="next-page" type='button' class='btn btn-success'
+                    onclick="window.location.assign('/index.html')">Start Over
+            </button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

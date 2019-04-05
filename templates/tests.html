@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>CSCI Web Applications HW 6 - Tests</title>
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'
+          integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>
+    <link rel="stylesheet" type="text/css" href="/static/css/index.css">
+
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'
+            integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM'
+            crossorigin='anonymous'></script>
+    <script src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
+    <script src="/static/js/index.js"></script>
+
+    <style type='text/css'>
+        .breadcrumb-item {
+            font-size: 25px;
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: '>' !important;
+        }
+
+        .breadcrumb > .active {
+            color: blue;
+        }
+    </style>
+</head>
+
+<body>
+<h1><span style='color: blue'>Web</span><span style='color: green'>Apps</span> <span style='color: blue'>HW</span><span
+        style='color: green'>6</span>
+</h1>
+
+<!--Loaded dynamically from index.js-->
+<nav id='breadcrumbs' aria-label='breadcrumb'>
+</nav>
+
+<div style='background-color: #FEF7C3; margin: 5px 50px 5px 50px; padding: 50px; border: 5px; border-radius: 10px'>
+    <div id="page-content">
+
+        <div style='margin: 50px 0 50px 0;'>
+
+            <div id='test_area'>
+                <h1>Running Tests... <img class="center" src="https://i.gifer.com/ZKZg.gif" height=100px width=100px
+                                          alt="Loading Gif"></h1>
+                <div class='progress'>
+                    <div id="progress-bar" class='progress-bar progress-bar-striped progress-bar-animated'
+                         role='progressbar' aria-valuenow='75'
+                         aria-valuemin='0'
+                         aria-valuemax='100' style='width: 0%'></div>
+                </div>
+            </div>
+
+            <script>
+                $('#next-page').css('display', 'none');
+
+                if (window.handler !== undefined)
+                    clearInterval(window.handler);
+
+                window.currentProgress = 0;
+
+                window.handler = setInterval(function () {
+                    $('#progress-bar').css('width', `${window.currentProgress += 4}%`);
+
+                    if (window.currentProgress >= 100) {
+                        finishTesting();
+                    }
+                }, 100);
+
+                function finishTesting() {
+                    clearInterval(handler);
+                    window.location.assign('/review.html');
+                }
+
+            </script>
+
+        </div>
+
+        <div id="nav-buttons">
+            <button id="previous-page" type='button' class='btn btn-success' onclick="if (window.handler !== undefined)
+            clearInterval(window.handler); window.location.assign('/configure.html');">Previous
+            </button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
