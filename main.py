@@ -1,16 +1,8 @@
-import json
 import os
 import sqlite3
 
-import pandas
 from flask import Flask, request, render_template, jsonify
-from werkzeug.utils import secure_filename
 
-import util
-import sqlite3
-
-# Import -- Example 42
-# get current app directory
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 # create a Flask instance
@@ -46,6 +38,7 @@ def database_fetch(query, args=()):
         conn.close()
         return ret
 
+
 # From Example 42 -->
 # Original Code Snippit Commented Out
 # app.config['DATA_FILE'] = UPLOAD_FOLDER + 'NRDC_data.csv'
@@ -75,20 +68,24 @@ def remove_party():
 
 @app.route('/view-parties.html')
 def view_parties():
-    conn = sqlite3.connect('party_planner.db')
-    cursor = conn.cursor()
-    cursor.execute("SELECT party_name, location_map_query FROM parties")
-    results = cursor.fetchall()
-    conn.close()
+    party_id_arg = request.args.get('party-id')
 
-    return render_template('view-parties.html', parties=results, parties_json=json.dumps(results))
+    if party_id_arg is not None:
+        results = database_fetch(
+            "SELECT party_id, party_name, location_map_query FROM parties WHERE party_id='" + party_id_arg + "'"
+        )
+    else:
+        results = database_fetch("SELECT party_id, party_name, location_map_query FROM parties")
+        party_id_arg = -1
+
+    return render_template('view-parties.html', party_id=party_id_arg, parties=results, parties_json=jsonify(results))
 
 
 @app.route('/api/get-parties', methods=['GET'])
 def get_parties():
     query = "SELECT * FROM parties"
     query_res = database_fetch(query)
-    if(query_res == None):
+    if query_res is None:
         return jsonify({'status': 401})
 
     ret = []
@@ -105,8 +102,8 @@ def insert_party():
     form = request.form
     add_query = 'INSERT INTO parties (start_time, end_time, party_name, user_id, location_map_query) VALUES(?,?,?,?,?)'
     query_params = (form['start_time'], form['end_time'], form[
-                    'party_name'], form['user_id'], form['location_map_query'])
-    if(database_execute(add_query, query_params)):
+        'party_name'], form['user_id'], form['location_map_query'])
+    if database_execute(add_query, query_params):
         return jsonify({'status': 201})
     else:
         return jsonify({'status': 304})
