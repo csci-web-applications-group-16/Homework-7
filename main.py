@@ -76,9 +76,26 @@ def add_party():
     return render_template('add-party.html')
 
 
+@app.route('/edit-party/<int:party_id_arg>')
+def edit_party(party_id_arg):
+    result = database_fetch(
+        "SELECT * FROM parties WHERE party_id=?", (party_id_arg,)
+    )
+
+    ret = []
+    rows = ['party_id', 'start_time', 'end_time',
+            'party_name', 'location_map_query']
+    for v in result:
+        ret.append({row: v[i] for i, row in enumerate(rows)})
+    return render_template('edit-party.html', party=ret[0])
+
+
 @app.route('/edit-party.html')
-def edit_party():
-    return render_template('edit-party.html')
+def edit_party_redirect():
+    results = database_fetch(
+        "SELECT party_id, party_name, location_map_query FROM parties")
+
+    return render_template('choose-party.html', parties=results)
 
 
 @app.route('/remove-party.html')
@@ -159,6 +176,23 @@ def insert_party():
         'party_name'], form['location_map_query'])
 
     party_id = database_insert(add_query, query_params)
+    if(party_id != None):
+        return jsonify({'status': 201, 'party_id': party_id})
+    else:
+        return jsonify({'status': 401})
+
+
+@app.route('/api/edit-party', methods=['POST'])
+def edit_party_api():
+    form = request.form
+    if(form['start_time'] == '' or form['end_time'] == '' or form['party_name'] == '' or form['location_map_query'] == ''):
+        return jsonify({'status': 401})
+
+    edit_query = 'INSERT or replace INTO parties (party_id, start_time, end_time, party_name, location_map_query) VALUES(?,?,?,?,?)'
+    query_params = (form['party_id'], form['start_time'], form['end_time'],
+                    form['party_name'], form['location_map_query'])
+
+    party_id = database_insert(edit_query, query_params)
     if(party_id != None):
         return jsonify({'status': 201, 'party_id': party_id})
     else:

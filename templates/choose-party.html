@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <title>CSCI Web Applications HW 7 - Party Planner</title>
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>
+    <link rel="stylesheet" type="text/css" href="/static/css/index.css">
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js' integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM' crossorigin='anonymous'></script>
+    <script src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
+    <script src="/static/js/index.js"></script>
+
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+         * element that contains the map. */
+        #map {
+            height: 100%;
+        }
+
+        /* Optional: Makes the sample page fill the window. */
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div style='background-color: #dbfeeb; margin: 5px 50px 5px 50px; text-align: center'>
+        <h1><span style='color: darkred'>Party Planner - Homework 7</span></h1>
+        <h3><span style='color: darkred'>Remove Parties</span></h3>
+
+        <div id="nav-buttons">
+            <button id="view-party" type='button' class='btn btn-success' onclick="window.location.assign('/view-parties.html')">View
+            </button>
+            <button id="add-party" type='button' class='btn btn-success' onclick="window.location.assign('/add-party.html')">Add
+            </button>
+            <button id="edit-party" type='button' class='btn btn-success' onclick="window.location.assign('/edit-party.html')">Edit
+            </button>
+            <button id="remove-party" type='button' class='btn btn-success' onclick="window.location.assign('/remove-party.html')">Remove
+            </button>
+        </div>
+    </div>
+
+    <div style='background-color: #dbfeeb; margin: 5px 50px 5px 50px; padding: 50px; border: 5px; border-radius: 10px'>
+        <div id="page-content">
+            <h2>
+                Choose a party to edit:
+            </h2>
+            <div id="button-container" style="width: 75%;">
+                {% for party in parties %}
+                <button id="party_{{ party[0] }}">
+                    <h3>
+                        <span style="color: mediumpurple">{{ party[1] }}</span> hosted at <span style="color: goldenrod">{{ party[2] }}</span><br>
+                    </h3>
+                </button>
+
+                <script>
+                    let $party_{{party[0]}} = $('#party_{{ party[0] }}');
+
+                    $party_{{ party[0] }}.click(function()
+                    {
+                        window.location.replace("http://localhost:5000/edit-party/{{party[0]}}");
+
+                    });
+                </script>
+
+                <br>
+                <br>
+                {% endfor %}
+            </div>
+            <h1 id="delete-message"></h1>
+        </div>
+    </div>
+</body>
+
+</html>
