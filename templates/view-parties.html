@@ -45,9 +45,23 @@
         <button id="edit-party" type='button' class='btn btn-success'
                 onclick="window.location.assign('/edit-party.html')">Edit
         </button>
-         <button id="remove-party" type='button' class='btn btn-success'
+        <button id="remove-party" type='button' class='btn btn-success'
                 onclick="window.location.assign('/remove-party.html')">Remove
         </button>
+    </div>
+</div>
+
+<div style='background-color: #dbfeeb; margin: 5px 50px 5px 50px; padding: 50px; border: 5px; border-radius: 10px'>
+    <div id="page-content">
+        <h2>
+            List of Parties:
+        </h2>
+        {% for party in parties %}
+            <h3>
+                <span style="color: mediumpurple">{{ party[0] }}</span> hosted at <span
+                    style="color: goldenrod">{{ party[1] }}</span><br>
+            </h3>
+        {% endfor %}
     </div>
 </div>
 
