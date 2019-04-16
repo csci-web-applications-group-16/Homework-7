@@ -1,3 +1,4 @@
+import json
 import os
 import sqlite3
 
@@ -40,7 +41,7 @@ def view_parties():
     results = cursor.fetchall()
     conn.close()
 
-    return render_template('view-parties.html', parties=results)
+    return render_template('view-parties.html', parties=results, parties_json=json.dumps(results))
 
 
 if __name__ == '__main__':
