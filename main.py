@@ -66,7 +66,19 @@ def edit_party():
 
 @app.route('/remove-party.html')
 def remove_party():
-    return render_template('remove-party.html')
+    party_id_arg = request.args.get('party-id')
+
+    if party_id_arg is not None:
+        results = database_fetch(
+            "SELECT party_id, party_name, location_map_query FROM parties WHERE party_id='" +
+            party_id_arg + "'"
+        )
+    else:
+        results = database_fetch(
+            "SELECT party_id, party_name, location_map_query FROM parties")
+        party_id_arg = -1
+
+    return render_template('remove-party.html', party_id=party_id_arg, parties=results)
 
 
 @app.route('/view-parties.html')
@@ -83,7 +95,7 @@ def view_parties():
             "SELECT party_id, party_name, location_map_query FROM parties")
         party_id_arg = -1
 
-    return render_template('view-parties.html', party_id=party_id_arg, parties=results, parties_json=jsonify(results))
+    return render_template('view-parties.html', party_id=party_id_arg, parties=results)
 
 
 @app.route('/api/get-parties', methods=['GET'])
