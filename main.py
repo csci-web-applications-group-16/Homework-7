@@ -10,6 +10,7 @@ app = Flask(__name__)
 
 
 def database_execute(query, args=()):
+    ret = True
     try:
         # Creates party_planner.db
         conn = sqlite3.connect('party_planner.db')
@@ -20,10 +21,11 @@ def database_execute(query, args=()):
         conn.commit()
     except:
         conn.rollback()
-        return False
+        ret = False
     finally:
         conn.close()
-        return True
+
+        return ret
 
 
 def database_fetch(query, args=()):
@@ -31,6 +33,7 @@ def database_fetch(query, args=()):
         conn = sqlite3.connect('party_planner.db')
         c = conn.execute(query, args)
         ret = c.fetchall()
+        print(ret)
     except:
         conn.rollback()
         ret = None
@@ -72,10 +75,12 @@ def view_parties():
 
     if party_id_arg is not None:
         results = database_fetch(
-            "SELECT party_id, party_name, location_map_query FROM parties WHERE party_id='" + party_id_arg + "'"
+            "SELECT party_id, party_name, location_map_query FROM parties WHERE party_id='" +
+            party_id_arg + "'"
         )
     else:
-        results = database_fetch("SELECT party_id, party_name, location_map_query FROM parties")
+        results = database_fetch(
+            "SELECT party_id, party_name, location_map_query FROM parties")
         party_id_arg = -1
 
     return render_template('view-parties.html', party_id=party_id_arg, parties=results, parties_json=jsonify(results))
@@ -97,17 +102,43 @@ def get_parties():
     return jsonify({'parties': ret, 'status': 201})
 
 
+@app.route('/api/get-party/<int:party_id>', methods=['GET'])
+def get_party(party_id):
+    query = 'SELECT * FROM parties WHERE party_id=?'
+    query_res = database_fetch(query, (party_id, ))
+
+    if(query_res == None):
+        return jsonify({'status': 401})
+
+    ret = []
+    rows = ['party_id', 'start_time', 'end_time',
+            'party_name', 'user_id', 'location_map_query']
+    for v in query_res:
+        ret.append({row: v[i] for i, row in enumerate(rows)})
+
+    return jsonify({'parties': ret, 'status': 201})
+
+
 @app.route('/api/add-party', methods=['POST'])
 def insert_party():
     form = request.form
     add_query = 'INSERT INTO parties (start_time, end_time, party_name, user_id, location_map_query) VALUES(?,?,?,?,?)'
     query_params = (form['start_time'], form['end_time'], form[
         'party_name'], form['user_id'], form['location_map_query'])
-    if database_execute(add_query, query_params):
+    if(database_execute(add_query, query_params)):
         return jsonify({'status': 201})
     else:
-        return jsonify({'status': 304})
+        return jsonify({'status': 401})
 
+
+@app.route('/api/remove-party', methods=['POST'])
+def remove_party_api():
+    form = request.form
+    remove_query = 'DELETE FROM parties WHERE party_id=?'
+    if('party_id' in form and database_execute(remove_query, (form['party_id'], ))):
+        return jsonify({'status': 200})
+    else:
+        return jsonify({'status': 401})
 
 if __name__ == '__main__':
     app.debug = True
