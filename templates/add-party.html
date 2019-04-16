@@ -73,6 +73,9 @@
                     });
                 }
             });
+
+            $('input[name="end_time"]').val(new Date().toJSON().slice(0, 16));
+            $('input[name="start_time"]').val(new Date().toJSON().slice(0, 16));
         });
     </script>
 
