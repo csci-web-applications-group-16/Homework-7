@@ -1,6 +1,6 @@
 import sqlite3
 
-#Creates party_planner.db
+# Creates party_planner.db
 conn = sqlite3.connect('party_planner.db')
 
 c = conn.cursor()
@@ -13,7 +13,7 @@ c.execute("""CREATE TABLE places(
             PRIMARY KEY(start_time, end_time)
 )""")
 
-#Data
+# Data
 c.execute("INSERT INTO places VALUES (19,22,'LOUNGE')")
 c.execute("INSERT INTO places VALUES (18,24,'HOOKAH LOT')")
 c.execute("INSERT INTO places VALUES (20,2,'PONTANA BOBS')")
@@ -26,10 +26,9 @@ c.execute("INSERT INTO places VALUES (9,4,'SUP DOGS')")
 c.execute("INSERT INTO places VALUES (8,8,'WAFFLE HOUSE')")
 c.execute("INSERT INTO places VALUES (12,2,'DIAMOND GIRLS')")
 
+# c.execute("SELECT * FROM places WHERE location = 'lounge'")
 
-#c.execute("SELECT * FROM places WHERE location = 'lounge'")
-
-#print(c.fetchall())
+# print(c.fetchall())
 
 
 conn.commit()
