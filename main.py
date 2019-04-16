@@ -105,9 +105,9 @@ def get_parties():
 @app.route('/api/get-party/<int:party_id>', methods=['GET'])
 def get_party(party_id):
     query = 'SELECT * FROM parties WHERE party_id=?'
-    query_res = database_fetch(query, (party_id, ))
+    query_res = database_fetch(query, (party_id,))
 
-    if(query_res == None):
+    if (query_res == None):
         return jsonify({'status': 401})
 
     ret = []
@@ -125,7 +125,7 @@ def insert_party():
     add_query = 'INSERT INTO parties (start_time, end_time, party_name, user_id, location_map_query) VALUES(?,?,?,?,?)'
     query_params = (form['start_time'], form['end_time'], form[
         'party_name'], form['user_id'], form['location_map_query'])
-    if(database_execute(add_query, query_params)):
+    if (database_execute(add_query, query_params)):
         return jsonify({'status': 201})
     else:
         return jsonify({'status': 401})
@@ -135,10 +135,11 @@ def insert_party():
 def remove_party_api():
     form = request.form
     remove_query = 'DELETE FROM parties WHERE party_id=?'
-    if('party_id' in form and database_execute(remove_query, (form['party_id'], ))):
+    if ('party_id' in form and database_execute(remove_query, (form['party_id'],))):
         return jsonify({'status': 200})
     else:
         return jsonify({'status': 401})
+
 
 if __name__ == '__main__':
     app.debug = True
