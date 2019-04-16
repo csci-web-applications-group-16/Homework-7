@@ -28,12 +28,29 @@ def database_execute(query, args=()):
         return ret
 
 
+def database_insert(query, args=()):
+    try:
+        # Creates party_planner.db
+        conn = sqlite3.connect('party_planner.db')
+
+        c = conn.cursor()
+        c.execute(query, args)
+        ret = c.lastrowid
+        conn.commit()
+    except:
+        conn.rollback()
+        ret = None
+    finally:
+        conn.close()
+
+        return ret
+
+
 def database_fetch(query, args=()):
     try:
         conn = sqlite3.connect('party_planner.db')
         c = conn.execute(query, args)
         ret = c.fetchall()
-        print(ret)
     except:
         conn.rollback()
         ret = None
@@ -107,7 +124,7 @@ def get_parties():
 
     ret = []
     rows = ['party_id', 'start_time', 'end_time',
-            'party_name', 'user_id', 'location_map_query']
+            'party_name', 'location_map_query']
     for v in query_res:
         ret.append({row: v[i] for i, row in enumerate(rows)})
 
@@ -134,11 +151,16 @@ def get_party(party_id):
 @app.route('/api/add-party', methods=['POST'])
 def insert_party():
     form = request.form
+    if(form['start_time'] == '' or form['end_time'] == '' or form['party_name'] == '' or form['location_map_query'] == ''):
+        return jsonify({'status': 401})
+
     add_query = 'INSERT INTO parties (start_time, end_time, party_name, location_map_query) VALUES(?,?,?,?)'
     query_params = (form['start_time'], form['end_time'], form[
-        'party_name'], form['user_id'], form['location_map_query'])
-    if database_execute(add_query, query_params):
-        return jsonify({'status': 201})
+        'party_name'], form['location_map_query'])
+
+    party_id = database_insert(add_query, query_params)
+    if(party_id != None):
+        return jsonify({'status': 201, 'party_id': party_id})
     else:
         return jsonify({'status': 401})
 

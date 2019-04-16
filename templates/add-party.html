@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang='en'>
+
 <head>
     <meta charset='UTF-8'>
     <title>CSCI Web Applications HW 7 - Party Planner</title>
-    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'
-          integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>
     <link rel="stylesheet" type="text/css" href="/static/css/index.css">
-    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'
-            integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM'
-            crossorigin='anonymous'></script>
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js' integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM' crossorigin='anonymous'></script>
     <script src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
     <script src="/static/js/index.js"></script>
 
@@ -20,142 +18,216 @@
         }
 
         /* Optional: Makes the sample page fill the window. */
-        html, body {
+        html,
+        body {
             height: 100%;
             margin: 0;
             padding: 0;
         }
+
     </style>
+
+    <script>
+        function showFail(msg)
+        {
+            $('#failMsg').html(msg);
+            $('#failMsg').css('display', 'block');
+
+        }
+
+        function verifyData(formData)
+        {
+            if(formData['end_time'] == '' || formData['start_time'] == '' || formData['party_name'] == '' || formData['location_map_query'] == '')
+            {
+                showFail('Please make sure all fields are completed');
+                return false;
+            }
+            else if(formData["end_time"] <= formData['start_time'])
+            {
+                showFail('Please make sure the start time is before the end time');
+                return false;
+            }
+            return true;
+        }
+
+        $(function()
+        {
+            $("#addPartyForm").submit(function(event)
+            {
+                event.preventDefault();
+                formData = {};
+                $('form').serializeArray().forEach(v => formData[v.name] = v.value);
+
+                if(verifyData(formData))
+                {
+                    $.post("/api/add-party", formData).then((ret) =>
+                    {
+                        if(ret.party_id)
+                        {
+                            window.location.replace("http://localhost:5000/view-parties.html?party-id=" + ret.party_id)
+                        }
+                        else
+                        {
+                            showFail('There was a problem adding your party please try again.');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 
 </head>
 
 <body>
 
-<div style='background-color: #dbfeeb; margin: 5px 50px 5px 50px; text-align: center'>
-    <h1><span style='color: darkred'>Party Planner - Homework 7</span></h1>
-    <h3><span style='color: darkred'>Add Party</span></h3>
+    <div style='background-color: #dbfeeb; margin: 5px 50px 5px 50px; text-align: center'>
+        <h1><span style='color: darkred'>Party Planner - Homework 7</span></h1>
+        <h3><span style='color: darkred'>Add Party</span></h3>
 
-    <div id="nav-buttons">
-        <button id="view-party" type='button' class='btn btn-success'
-                onclick="window.location.assign('/view-parties.html')">View
-        </button>
-        <button id="add-party" type='button' class='btn btn-success'
-                onclick="window.location.assign('/add-party.html')">Add
-        </button>
-        <button id="edit-party" type='button' class='btn btn-success'
-                onclick="window.location.assign('/edit-party.html')">Edit
-        </button>
-        <button id="remove-party" type='button' class='btn btn-success'
-                onclick="window.location.assign('/remove-party.html')">Remove
-        </button>
-    </div>
-</div>
-
-<div style='background-color: #dbfeeb; margin: 5px 50px 5px 50px; padding: 50px; border: 5px; border-radius: 10px'>
-    <div id="page-content">
-        <div id="map-holder" style="width:100%; height:500px; margin: 0 0 auto; text-align: center;">
-            <div id="map"></div>
+        <div id="nav-buttons">
+            <button id="view-party" type='button' class='btn btn-success' onclick="window.location.assign('/view-parties.html')">View
+            </button>
+            <button id="add-party" type='button' class='btn btn-success' onclick="window.location.assign('/add-party.html')">Add
+            </button>
+            <button id="edit-party" type='button' class='btn btn-success' onclick="window.location.assign('/edit-party.html')">Edit
+            </button>
+            <button id="remove-party" type='button' class='btn btn-success' onclick="window.location.assign('/remove-party.html')">Remove
+            </button>
         </div>
     </div>
-</div>
 
-<script>
-    let map;
+    <div style='background-color: #dbfeeb; margin: 5px 50px 5px 50px; padding: 50px; border: 5px; border-radius: 10px'>
+        <div id="page-content">
+            <h5 id='failMsg' style='display: none; color: darkred'>Text</h5>
+            <form role="form" id="addPartyForm" class="form-horizontal">
 
-    function initMap() {
-        map = new google.maps.Map(
-            document.getElementById('map'),
-            {center: new google.maps.LatLng(-33.91722, 151.23064), zoom: 16});
+                <div class="form-group">
+                    <label for="partyName">Name this party.</label>
+                    <input type="text" class="form-control" id="partyNameInput" name="party_name" placeholder="Enter name">
+                </div>
+                <div class="form-group">
+                    <label for="partyLoc">Where is this party?</label>
+                    <input type="text" class="form-control" id="partyLocInput" name="location_map_query" placeholder="Enter location">
+                </div>
+                <div class="form-group">
+                    <label for="partyStart">When does it start?</label>
+                    <input type="datetime-local" class="form-control" name="start_time" id="partyStartInput">
+                </div>
+                <div class="form-group">
+                    <label for="partyEnd">When does it end?</label>
+                    <input type="datetime-local" class="form-control" name="end_time" id="partyEndInput">
+                </div>
+                <button type="submit" class="btn btn-primary" id='submitBtn'>Submit</button>
+            </form>
+        </div>
+    </div>
 
-        const iconBase =
-            'https://developers.google.com/maps/documentation/javascript/examples/full/images/';
+    <div style='background-color: #dbfeeb; margin: 5px 50px 5px 50px; padding: 50px; border: 5px; border-radius: 10px'>
+        <div id="page-content">
+            <div id="map-holder" style="width:100%; height:500px; margin: 0 0 auto; text-align: center;">
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
 
-        const icons = {
-            parking: {
-                icon: iconBase + 'parking_lot_maps.png'
-            },
-            library: {
-                icon: iconBase + 'library_maps.png'
-            },
-            info: {
-                icon: iconBase + 'info-i_maps.png'
-            }
-        };
+    <script>
+        let map;
 
-        const features = [
+        function initMap()
+        {
+            map = new google.maps.Map(
+                document.getElementById('map'),
+                {center: new google.maps.LatLng(-33.91722, 151.23064), zoom: 16});
+
+            const iconBase =
+                'https://developers.google.com/maps/documentation/javascript/examples/full/images/';
+
+            const icons = {
+                parking: {
+                    icon: iconBase + 'parking_lot_maps.png'
+                },
+                library: {
+                    icon: iconBase + 'library_maps.png'
+                },
+                info: {
+                    icon: iconBase + 'info-i_maps.png'
+                }
+            };
+
+            const features = [
+                {
+                    position: new google.maps.LatLng(-33.91721, 151.22630),
+                    type: 'info'
+                }, {
+                    position: new google.maps.LatLng(-33.91539, 151.22820),
+                    type: 'info'
+                }, {
+                    position: new google.maps.LatLng(-33.91747, 151.22912),
+                    type: 'info'
+                }, {
+                    position: new google.maps.LatLng(-33.91910, 151.22907),
+                    type: 'info'
+                }, {
+                    position: new google.maps.LatLng(-33.91725, 151.23011),
+                    type: 'info'
+                }, {
+                    position: new google.maps.LatLng(-33.91872, 151.23089),
+                    type: 'info'
+                }, {
+                    position: new google.maps.LatLng(-33.91784, 151.23094),
+                    type: 'info'
+                }, {
+                    position: new google.maps.LatLng(-33.91682, 151.23149),
+                    type: 'info'
+                }, {
+                    position: new google.maps.LatLng(-33.91790, 151.23463),
+                    type: 'info'
+                }, {
+                    position: new google.maps.LatLng(-33.91666, 151.23468),
+                    type: 'info'
+                }, {
+                    position: new google.maps.LatLng(-33.916988, 151.233640),
+                    type: 'info'
+                }, {
+                    position: new google.maps.LatLng(-33.91662347903106, 151.22879464019775),
+                    type: 'parking'
+                }, {
+                    position: new google.maps.LatLng(-33.916365282092855, 151.22937399734496),
+                    type: 'parking'
+                }, {
+                    position: new google.maps.LatLng(-33.91665018901448, 151.2282474695587),
+                    type: 'parking'
+                }, {
+                    position: new google.maps.LatLng(-33.919543720969806, 151.23112279762267),
+                    type: 'parking'
+                }, {
+                    position: new google.maps.LatLng(-33.91608037421864, 151.23288232673644),
+                    type: 'parking'
+                }, {
+                    position: new google.maps.LatLng(-33.91851096391805, 151.2344058214569),
+                    type: 'parking'
+                }, {
+                    position: new google.maps.LatLng(-33.91818154739766, 151.2346203981781),
+                    type: 'parking'
+                }, {
+                    position: new google.maps.LatLng(-33.91727341958453, 151.23348314155578),
+                    type: 'library'
+                }
+            ];
+
+            // Create markers.
+            for(let i = 0; i < features.length; i++)
             {
-                position: new google.maps.LatLng(-33.91721, 151.22630),
-                type: 'info'
-            }, {
-                position: new google.maps.LatLng(-33.91539, 151.22820),
-                type: 'info'
-            }, {
-                position: new google.maps.LatLng(-33.91747, 151.22912),
-                type: 'info'
-            }, {
-                position: new google.maps.LatLng(-33.91910, 151.22907),
-                type: 'info'
-            }, {
-                position: new google.maps.LatLng(-33.91725, 151.23011),
-                type: 'info'
-            }, {
-                position: new google.maps.LatLng(-33.91872, 151.23089),
-                type: 'info'
-            }, {
-                position: new google.maps.LatLng(-33.91784, 151.23094),
-                type: 'info'
-            }, {
-                position: new google.maps.LatLng(-33.91682, 151.23149),
-                type: 'info'
-            }, {
-                position: new google.maps.LatLng(-33.91790, 151.23463),
-                type: 'info'
-            }, {
-                position: new google.maps.LatLng(-33.91666, 151.23468),
-                type: 'info'
-            }, {
-                position: new google.maps.LatLng(-33.916988, 151.233640),
-                type: 'info'
-            }, {
-                position: new google.maps.LatLng(-33.91662347903106, 151.22879464019775),
-                type: 'parking'
-            }, {
-                position: new google.maps.LatLng(-33.916365282092855, 151.22937399734496),
-                type: 'parking'
-            }, {
-                position: new google.maps.LatLng(-33.91665018901448, 151.2282474695587),
-                type: 'parking'
-            }, {
-                position: new google.maps.LatLng(-33.919543720969806, 151.23112279762267),
-                type: 'parking'
-            }, {
-                position: new google.maps.LatLng(-33.91608037421864, 151.23288232673644),
-                type: 'parking'
-            }, {
-                position: new google.maps.LatLng(-33.91851096391805, 151.2344058214569),
-                type: 'parking'
-            }, {
-                position: new google.maps.LatLng(-33.91818154739766, 151.2346203981781),
-                type: 'parking'
-            }, {
-                position: new google.maps.LatLng(-33.91727341958453, 151.23348314155578),
-                type: 'library'
+                const marker = new google.maps.Marker({
+                    position: features[i].position,
+                    icon: icons[features[i].type].icon,
+                    map: map
+                });
             }
-        ];
-
-        // Create markers.
-        for (let i = 0; i < features.length; i++) {
-            const marker = new google.maps.Marker({
-                position: features[i].position,
-                icon: icons[features[i].type].icon,
-                map: map
-            });
         }
-    }
-</script>
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVznZMFRs1DZtQp1vRaxAHjSNyBvkStyo&callback=initMap"
-        type="text/javascript">
-</script>
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVznZMFRs1DZtQp1vRaxAHjSNyBvkStyo&callback=initMap" type="text/javascript">
+    </script>
 </body>
+
 </html>
